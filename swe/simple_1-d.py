@@ -1,21 +1,49 @@
 
+# to start venv in Github put source ./venv/bin/activate
+
 import numpy as np
 
-t_steps = 5
-x_steps = 5
+print("simple 1-d swe simulation")
+print("initializing......")
+
+t_steps = 10
+x_steps = 10
 t = 0
+g = -9.81
 endt = 1
 
 h_array = np.zeros((t_steps,x_steps))
 u_array = np.zeros((t_steps,x_steps))
 
-h_initial = np.array([1,0,1,1,1])
-u_initial = np.array([1,0,1,1,1])
+h_initial = np.array([1,0,1,1,1,0,0,0,0,0])
+u_initial = np.array([1,0,1,1,1,0,0,0,0,0])
 
-set initials
+print("initial h:")
+print(h_initial)
+print("initial u:")
+print(u_initial)
 
-for i in range(tsteps):
+h_array[0] = h_initial
+u_array[0] = u_initial
 
-    for j in range(xsteps - i): # -i because of boundry conditions
+print("finite difference method ......")
 
-        h_t1 = (tstep/xstep)(h_x*u_x - hx1*ux1) + h_t
+for i in range(t_steps-1):
+
+    h = h_array[i]
+    u = u_array[i]
+
+    h_new = h_array[i+1]
+    u_new = u_array[i+1]
+
+    for j in range(x_steps - i-1): # -i because of boundry finite derivitives
+
+        h_new[j] = h[j] + (t_steps/x_steps)*(h[j]*u[j] - h[j+1]*u[j+1])
+        u_new[j] = u[j] - (t_steps)*(u[j]*(u[j+1]-u[j])/x_steps + g*(h[j+1]-h[j])/x_steps)
+
+    h_array[i+1] = h_new
+    u_array[i+1] = u_new
+
+
+print("h array:")
+print(h_array)
