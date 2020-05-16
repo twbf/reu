@@ -12,14 +12,14 @@ num_x = 200
 
 t = 0
 g = 9.81
-endt = 0.2
-endx = 10
+endt = 40
+endx = 2
 
 t_steps = endt/num_t
 x_steps = endx/num_x
 
 def initial_height(x):
-    return np.cos(x)
+    return np.exp(x+np.cos((4*x)**2))
 
 def initial_speed(x):
     return 1
@@ -56,8 +56,9 @@ for i in range(num_t-1):
 
     for j in range(i+1, num_x - i-1): # -i because of boundry finite derivitives
 
-        h_new[j] = h[j] + (t_steps/x_steps)*(h[j+1]*u[j+1]- h[j-1]*u[j-1])
-        u_new[j] = u[j] - (t_steps)*(u[j]*(u[j+1]-u[j-1])/x_steps + g*(h[j+1]-h[j-1])/x_steps)
+        u_new[j] = u[j] - (t_steps)*(u_new[j-1]*(u[j+1]-u[j-1])/2*x_steps + g*(h[j+1]-h[j-1])/2*x_steps)
+        h_new[j] = h[j] + (t_steps)*(u_new[j]*(h[j+1]-h[j-1])/2*x_steps + h_new[j-1]*(u[j+1]-u[j-1])/2*x_steps)
+
 
     h_array[i+1] = h_new
     u_array[i+1] = u_new
