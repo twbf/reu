@@ -3,28 +3,38 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import Math
 
 print("simple 1-d swe simulation")
 print("initializing......")
 
-num_t = 10
-num_x = 40
+num_t = 60
+num_x = 200
 
 t = 0
 g = 9.81
-endt = 0.01
-endx = 1
+endt = 0.2
+endx = 10
 
 t_steps = endt/num_t
 x_steps = endx/num_x
+
+def initial_height(x):
+    return np.cos(x)
+
+def initial_speed(x):
+    return 1
 
 
 h_array = np.zeros((num_t,num_x))
 u_array = np.zeros((num_t,num_x))
 
-h_initial = np.array([1,1,1,1,1,1,1,1,1,1,1,1,1.1,1.2,1.3,1.5,1.75,1.9,1.9,1.9,1.75,1.5,1.25,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-u_initial = np.array([0,0,0,0,0,0,0,0,0,0,0,0,-0.5,-1,-1,-1,-1,-0.5,0,0.5,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
+h_initial = np.zeros((num_x))
+u_initial = np.zeros((num_x))
+
+for i in range(1, num_x):
+    h_initial[i] = initial_height(x_steps*i)
+    u_initial[i] = initial_speed(x_steps*i)
+
 
 print("initial h:")
 print(h_initial)
@@ -46,7 +56,7 @@ for i in range(num_t-1):
 
     for j in range(i+1, num_x - i-1): # -i because of boundry finite derivitives
 
-        h_new[j] = h[j] + (t_steps/x_steps)*(h[j-1]*u[j-1] - h[j+1]*u[j+1])
+        h_new[j] = h[j] + (t_steps/x_steps)*(h[j+1]*u[j+1]- h[j-1]*u[j-1])
         u_new[j] = u[j] - (t_steps)*(u[j]*(u[j+1]-u[j-1])/x_steps + g*(h[j+1]-h[j-1])/x_steps)
 
     h_array[i+1] = h_new
@@ -64,7 +74,7 @@ print(u_array)
 
 for i in range(num_t):
     plt.plot(h_array[i])
-    plt.show()
+plt.show()
 
 
 print("Done")
