@@ -55,7 +55,7 @@ def greenspan(s,lambd):
 
 
 
-ndx = 2
+ndx = 10
 dx = 1
 ndt = 2
 dt = 0.1
