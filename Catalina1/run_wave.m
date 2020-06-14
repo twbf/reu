@@ -71,11 +71,14 @@ dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
 %%% Bathymetry function:
-h  = td*xc;
+h = zeros(N, 1);
+h(1:1000) = td*xc
+h(1000:N) = -1
+
 
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
-w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
+w0(1:N) = max(h, eps+0*h(xc));   % zero initial condition without velocities
 w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
 
 % time stepping:
@@ -104,6 +107,8 @@ Rup = zeros(M,1);
 for t=1:M % loop in time
     ind = find(solpr(1:N,t) > 1e-2, 1, 'first');
     Rup(t) = -h(ind);
+
+    disp(solpr(500,t))
 
 	Plot(tlist(t), solpr(:,t));
 end % for t
