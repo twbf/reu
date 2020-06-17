@@ -37,6 +37,8 @@ for i = 1:len
 end
 %scatter(xx,tt)
 
+
+
 mesh(xx,tt,hh)
 
 mesh(xx,tt,uu)

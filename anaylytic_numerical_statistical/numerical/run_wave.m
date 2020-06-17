@@ -52,9 +52,9 @@ g2 = 0.5*g;	% g/2
 cf2 = 0.0;	% friction coefficient
 
 a  = -2.5;	% the left boundary (incident wave)
-b  = 160.0;	% the right boundary (wall)
+b  = 22.0;	% the right boundary (wall)
 % Bottom slope:
-td = 7.0/10.0;
+td = 10.0/10.0;
 
 %%% Initial condition parameters:
 H1 = 1;
@@ -65,13 +65,17 @@ x1 = 3.5;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 2000;							% number of grid points
+N  = 4000;							% number of grid points
 x  = linspace(a, b, N+1)';			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
 %%% Bathymetry function:
 h  = td*xc;
+
+mm=2000;
+
+small_h = h(1:mm);
 
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
@@ -110,7 +114,33 @@ for t=1:M % loop in time
 end % for t
 Rup = Rup - Rup(1);
 
-mesh((solpr(1:2000,:)-h))
+disp(solpr(1:3,1))
+
+%making triangulation
+
+x_mat = zeros(mm,M);
+
+t_mat = zeros(mm,M);
+
+for i=1:mm
+    t_mat(i,:) = tlist;
+end
+
+for j=1:M
+    x_mat(:,j)= linspace(a, b, mm);
+end
+
+
+mesh((solpr(1:mm,:)-small_h));
+
+hh = reshape((solpr(1:mm,:)-small_h), [mm*M,1]);
+
+xx = reshape(x_mat, [mm*M,1]);
+
+tt = reshape(t_mat, [mm*M,1]);
+
+num = scatteredInterpolant(xx,tt,hh)
+save('num_interp', 'num')
 
 %%% Extraction of run-up data:
 Rup = smooth(Rup, 7);
