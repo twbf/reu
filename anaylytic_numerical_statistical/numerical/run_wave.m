@@ -34,8 +34,8 @@ close all
 format longE
 
 %%% Libraries we use:
-addpath('Original_Catalina1/sources/');
-addpath('Original_Catalina1/odetpbar/');
+addpath('anaylytic_numerical_statistical/numerical/sources/');
+addpath('anaylytic_numerical_statistical/numerical/odetpbar/');
 
 %%% Global variables:
 global cf2 d xc FS IN LW
@@ -57,16 +57,16 @@ b  = 22.0;	% the right boundary (wall)
 td = 10.0/10.0;
 
 %%% Initial condition parameters:
-H1 = 1;
+H1 = 0.1;
 H2 = 0.000;
 c1 = 1;
 c2 = 4.0;
-x1 = 3.5;
+x1 = 5;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 4000;							% number of grid points
-x  = linspace(a, b, N+1)';			% cell interfaces
+N  = 2000;							% number of grid points
+x  = linspace(a, b, N+1);			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
@@ -110,7 +110,7 @@ for t=1:M % loop in time
     Rup(t) = -h(ind);
 
 	%Plot(tlist(t), solpr(:,t));
-  
+
 end % for t
 Rup = Rup - Rup(1);
 
@@ -130,16 +130,28 @@ for j=1:M
     x_mat(:,j)= linspace(a, b, mm);
 end
 
+%adding bathymetry
 
-mesh((solpr(1:mm,:)-small_h));
+hh = zeros(mm,M)
+for i=1:mm
+    for j=1:M
+        if solpr(i,j)<0.01 &&  solpr(i,j)>-0.01
+            hh(i,j) = 0
+        else
+            hh(i,j) = (solpr(i,j)-small_h(i,j))
+        end
+    end
+end
 
-hh = reshape((solpr(1:mm,:)-small_h), [mm*M,1]);
+mesh(hh);
+
+hh = reshape(hh, [mm*M,1]);
 
 xx = reshape(x_mat, [mm*M,1]);
 
 tt = reshape(t_mat, [mm*M,1]);
 
-num = scatteredInterpolant(xx,tt,hh)
+%num = scatteredInterpolant(xx,tt,hh)
 save('num_interp', 'num')
 
 %%% Extraction of run-up data:

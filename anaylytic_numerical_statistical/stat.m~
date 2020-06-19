@@ -1,0 +1,80 @@
+load('ana_interp1')
+load('num_interp1')
+
+size = 100;
+
+dx = 1/11;
+dt = 1/30;
+
+diff = zeros(size,size);
+
+l2 = zeros(size);
+
+numerical = zeros(size,size);
+
+anaylytic = zeros(size,size);
+
+for j=1:size
+    for i=1:size
+    
+        x = dx*i;
+        t = dt*j;
+        
+        numerical(i,j) = num(x+0.5,t);
+        
+        anaylytic(i,j) = ana(x,t);
+        
+        diff(i,j) = ana(x,t)-num(x+0.5,t);
+        
+    end
+    
+    l2(j) = norm(diff(:,j),2);
+end
+
+numerical = reshape(numerical, [size*size,1]);
+
+anaylytic = reshape(anaylytic, [size*size,1]);
+
+diff = reshape(diff, [size*size,1]);
+
+
+anaylytic = reshape(anaylytic, [size*size,1]);
+
+xx = reshape(x_mat, [mm*M,1]);
+
+tt = reshape(t_mat, [mm*M,1]);
+
+endt = 3
+
+endx = 10
+
+figure(1)
+mesh(numerical)
+title(['Numerical Solution (Deny FV)'], IN, 'latex', FS, 14);
+set(gca,'xtick',1:.1:10)
+xlabel('$x$', IN, 'latex', 'fontsize', 16);
+ylabel('$t$', IN, 'latex', 'fontsize', 16);
+
+figure(2)
+mesh(anaylytic)
+title(['Anaylytical Solution (Nicolsky et al. 2018)'], IN, 'latex', FS, 14);
+xlabel('$x$', IN, 'latex', 'fontsize', 16);
+ylabel('$t$', IN, 'latex', 'fontsize', 16);
+
+figure(3)
+mesh(diff)
+title(['Anaylytical-Numerical Mesh'], IN, 'latex', FS, 14);
+xlabel('$x$', IN, 'latex', 'fontsize', 16);
+ylabel('$t$', IN, 'latex', 'fontsize', 16);
+
+
+figure(4)
+plot(l2)
+title(['L2 Norm of the differnce for each $t$'], IN, 'latex', FS, 14);
+xlabel('$t$', IN, 'latex', 'fontsize', 16);
+ylabel('$L2 Norm$', IN, 'latex', 'fontsize', 16);
+
+
+
+
+

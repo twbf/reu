@@ -6,7 +6,7 @@ format longE
 addpath('export_fig/');
 
 %%% Physical parameter:
-x0 = 8;
+x0 = 5;
 K  = 4.0;		% upper bound in k domain [0, K]
 L  = 20.0;		% upper bound in x domain [0, L]
 Ls = 10.0;		% upper bound for s parameter
@@ -32,7 +32,7 @@ disp('done')
  title('Initial free surface elevation');
  set(gcf, 'color', 'w');
  export_fig('Eta.png', '-m2', '-a4', '-painters');
- 
+
 
 disp('j0....')
 
@@ -52,7 +52,7 @@ disp('done')
  title('Coefficient $a(k)$', 'interpreter', 'LaTeX', 'fontsize', 13);
  set(gcf, 'color', 'w');
  export_fig('Eta1.png', '-m2', '-a4', '-painters');
- 
+
 disp('phi....')
 
 Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
@@ -68,12 +68,12 @@ phi   = chebfun2(@(s,la) sum(a(k)*Cos(la*k)*j0(2.0*k*sqrt(s))), [0 Ls 0 La], 've
  title('Phi Two-parameters integral $f(s,\lambda)$', 'interpreter', 'LaTeX', 'fontsize', 12);
  set(gcf, 'color', 'w');
  export_fig('phi.png', '-m2', '-a4', '-painters');
- 
+
  disp('done')
 disp(phi(1,2))
- 
+
  disp('psi...')
- 
+
 Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
 psi = chebfun2(@(s,la) s^(-1/2)*sum(a(k)*Sin(la*k)*j1(2.0*k*sqrt(s))), [0.01 Ls 0.01 La], 'vectorize');
 
@@ -87,16 +87,15 @@ disp('done')
  title('Psi Two-parameters integral $f(s,\lambda)$', 'interpreter', 'LaTeX', 'fontsize', 12);
  set(gcf, 'color', 'w');
  export_fig('psi.png', '-m2', '-a4', '-painters');
- 
+
 save('psi_phi')
 
 
- 
+
 %u = psi(s,lamda)
 
-%eta = phi(s,lambda)-u^2/2 
+%eta = phi(s,lambda)-u^2/2
 
 %x = s-eta
 
-%t = u + lamda 
-
+%t = u + lamda

@@ -2,6 +2,8 @@ load('psi_phi_old.mat')
 
 len = 160;
 
+g = sqrt(9.81);
+
 xx = zeros(len, len);
 
 tt = zeros(len, len);
@@ -26,7 +28,7 @@ for i = 1:len
 
         x = s - h;
 
-        t = u + lamda;
+        t = (u + lamda)/g;
         
         xx(i,j) = x;
         tt(i,j) = t;
@@ -41,13 +43,19 @@ end
 
 mesh(xx,tt,hh)
 
-mesh(xx,tt,uu)
-
-title(['CG Transformed Coordinates $10 X 10$ Grid in $(s,\lambda)$ with $1/4$ step sizeto $(x,t)$'], IN, 'latex', FS, 14);
+title(['$\eta(x,t)$ by CG Transform'], IN, 'latex', FS, 14);
 xlabel('$x$', IN, 'latex', 'fontsize', 16);
 ylabel('$t$', IN, 'latex', 'fontsize', 16);
 
 
+hh = reshape(hh, [len*len,1]);
+
+xx = reshape(xx, [len*len,1]);
+
+tt = reshape(tt, [len*len,1]);
+
+ana = scatteredInterpolant(xx,tt,hh,'natural','none')
+save('ana_interp1_0', 'ana')
 
 view(3)
 

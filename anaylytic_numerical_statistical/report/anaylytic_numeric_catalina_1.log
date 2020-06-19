@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  16 JUN 2020 20:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  18 JUN 2020 23:15
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -154,43 +154,86 @@ e
 
 LaTeX Warning: No \author given.
 
-<images/anaylytic.png, id=1, 2890.8pt x 1704.3675pt>
-File: images/anaylytic.png Graphic file (type png)
-<use images/anaylytic.png>
-Package pdftex.def Info: images/anaylytic.png  used on input line 31.
-(pdftex.def)             Requested size: 345.0pt x 203.39699pt.
+<num.png, id=1, 1124.2pt x 843.15pt>
+File: num.png Graphic file (type png)
+<use num.png>
+Package pdftex.def Info: num.png  used on input line 34.
+(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 31--32
+Overfull \hbox (15.0pt too wide) in paragraph at lines 34--35
 [][] 
  []
 
 [1
 
-{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./image
-s/anaylytic.png (PNG copy)>] [2] (./anaylytic_numeric_catalina_1.aux) ) 
+{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<images/scatter.png, id=17, 2890.8pt x 1483.5425pt>
+File: images/scatter.png Graphic file (type png)
+<use images/scatter.png>
+Package pdftex.def Info: images/scatter.png  used on input line 43.
+(pdftex.def)             Requested size: 345.0pt x 177.04402pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 43--44
+[][] 
+ []
+
+<ana.png, id=18, 1124.2pt x 843.15pt>
+File: ana.png Graphic file (type png)
+<use ana.png>
+Package pdftex.def Info: ana.png  used on input line 49.
+(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 49--50
+[][] 
+ []
+
+[2 <./num.png (PNG copy)> <./images/scatter.png (PNG copy)>]
+<diff.png, id=22, 1124.2pt x 843.15pt>
+File: diff.png Graphic file (type png)
+<use diff.png>
+Package pdftex.def Info: diff.png  used on input line 55.
+(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 55--56
+[][] 
+ []
+
+[3 <./ana.png (PNG copy)>]
+<l2.png, id=26, 1124.2pt x 843.15pt>
+File: l2.png Graphic file (type png)
+<use l2.png>
+Package pdftex.def Info: l2.png  used on input line 60.
+(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 60--61
+[][] 
+ []
+
+[4 <./diff.png (PNG copy)>] [5 <./l2.png (PNG copy)>]
+(./anaylytic_numeric_catalina_1.aux) ) 
 Here is how much of TeX's memory you used:
- 1784 strings out of 480608
- 24505 string characters out of 5903631
- 263550 words of memory out of 5000000
- 17694 multiletter control sequences out of 15000+600000
+ 1806 strings out of 480608
+ 24723 string characters out of 5903631
+ 263535 words of memory out of 5000000
+ 17713 multiletter control sequences out of 15000+600000
  537413 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,7n,25p,255b,195s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/lo
-cal/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/loc
-al/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/loca
-l/texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/
-texlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/te
-xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texl
-ive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texliv
-e/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2
-020/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2020
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2020/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on anaylytic_numeric_catalina_1.pdf (2 pages, 436558 bytes).
+ 30i,7n,25p,284b,195s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2020/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2020/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmsy7.pfb>
+Output written on anaylytic_numeric_catalina_1.pdf (5 pages, 807822 bytes).
 PDF statistics:
- 52 PDF objects out of 1000 (max. 8388607)
- 36 compressed objects within 1 object stream
+ 65 PDF objects out of 1000 (max. 8388607)
+ 42 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
