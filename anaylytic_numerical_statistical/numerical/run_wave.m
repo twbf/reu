@@ -34,8 +34,8 @@ close all
 format longE
 
 %%% Libraries we use:
-addpath('anaylytic_numerical_statistical/numerical/sources/');
-addpath('anaylytic_numerical_statistical/numerical/odetpbar/');
+addpath('numerical/sources/');
+addpath('numerical/odetpbar/');
 
 %%% Global variables:
 global cf2 d xc FS IN LW
@@ -52,20 +52,20 @@ g2 = 0.5*g;	% g/2
 cf2 = 0.0;	% friction coefficient
 
 a  = -2.5;	% the left boundary (incident wave)
-b  = 22.0;	% the right boundary (wall)
+b  = 33.5;	% the right boundary (wall)
 % Bottom slope:
 td = 10.0/10.0;
 
 %%% Initial condition parameters:
-H1 = 0.1;
-H2 = 0.000;
-c1 = 1;
-c2 = 4.0;
-x1 = 5;
+H1 = 1.006;
+H2 = 0.00;
+c1 = 1.0;
+c2 = 1.0;
+x1 = 3.5;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 2000;							% number of grid points
+N  = 6000;							% number of grid points
 x  = linspace(a, b, N+1);			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
@@ -80,11 +80,11 @@ small_h = h(1:mm);
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
-w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
+w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) %- H2*exp(-c2*(xc - x2).^2);
 
 % time stepping:
 t0 = 0.0;
-Tf = 10.0; % final simulation time (the same as experiment)
+Tf = 3.30; % final simulation time (the same as experiment)
 
 %%% Plot the initial condition to check:
 amp = 1.5*H2;
@@ -109,14 +109,9 @@ for t=1:M % loop in time
     ind = find(solpr(1:N,t) > 1e-2, 1, 'first');
     Rup(t) = -h(ind);
 
-	%Plot(tlist(t), solpr(:,t));
-
+	Plot(tlist(t), solpr(:,t));
 end % for t
 Rup = Rup - Rup(1);
-
-disp(solpr(1:3,1))
-
-%making triangulation
 
 x_mat = zeros(mm,M);
 
@@ -127,7 +122,7 @@ for i=1:mm
 end
 
 for j=1:M
-    x_mat(:,j)= linspace(a, b, mm);
+    x_mat(:,j)= linspace(-2, 10, mm);
 end
 
 %adding bathymetry
@@ -136,14 +131,17 @@ hh = zeros(mm,M)
 for i=1:mm
     for j=1:M
         if solpr(i,j)<0.01 &&  solpr(i,j)>-0.01
-            hh(i,j) = 0
+            hh(i,j) = 0;
         else
-            hh(i,j) = (solpr(i,j)-small_h(i,j))
+            hh(i,j) = (solpr(i,j)-small_h(i));
         end
     end
 end
 
 mesh(hh);
+title(['$\eta(x,t)$ by FVM'], IN, 'latex', FS, 14);
+xlabel('$x$', IN, 'latex', 'fontsize', 16);
+ylabel('$t$', IN, 'latex', 'fontsize', 16);
 
 hh = reshape(hh, [mm*M,1]);
 
@@ -151,8 +149,8 @@ xx = reshape(x_mat, [mm*M,1]);
 
 tt = reshape(t_mat, [mm*M,1]);
 
-%num = scatteredInterpolant(xx,tt,hh)
-save('num_interp', 'num')
+num = scatteredInterpolant(xx,tt,hh)
+save('num_interp1', 'num')
 
 %%% Extraction of run-up data:
 Rup = smooth(Rup, 7);
