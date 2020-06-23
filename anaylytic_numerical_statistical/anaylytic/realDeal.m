@@ -42,41 +42,36 @@ u_prime = chebfun(@(x) -2*(x-x0)*exp(-(x-x0)^.2), [0 L]);
 %data projection to lambda = 0
 %I can make this faster by setting variables
 
-disp('data projection onto lamba = 0...')
-
-for xx=1:10
-    s = xx + eta(xx);
-    A = [0 1; beta^2*s 0];
-    B = [0 0; 1 0];
-    D = (1+eta_prime(xx))*eye(2) + u_prime(xx)*A;
-    phi0 = [u(xx) ; eta(xx)+(u(xx)^2)/2];
-    phi0_prime = [u_prime(xx); eta_prime(xx)+2*u(xx)*u_prime(xx)];
-    
-    proj1 = phi0 + u(xx)*(u_prime(xx)*inv(D)*B*phi0 - B*phi0-A*inv(D)*phi0_prime);
-
-end
-
-function ave = average(x)
-    ave = sum(x(:))/numel(x); 
-end
-
-
-disp('done')
 
  %figure(1);
  %plot(eta)
  %xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 12);
  %ylabel('$\eta(x)$', 'interpreter', 'LaTeX', 'fontsize', 12);
  %title('Initial free surface elevation');
- set(gcf, 'color', 'w');
- export_fig('Eta.png', '-m2', '-a4', '-painters');
+ %set(gcf, 'color', 'w');
+ %export_fig('Eta.png', '-m2', '-a4', '-painters');
 
 
-disp('j0....')
-
+disp('j0...')
 j0 = chebfun(@(kx) besselj(0.0, kx), [0.0 max([2.0*K*max(sqrt(x + eta)) 2.0*K*sqrt(Ls)])]);
 
+disp('j1...')
 j1 = chebfun(@(kx) besselj(1.0, kx), [0.0 max([2.0*K*max(sqrt(x + eta)) 2.0*K*sqrt(Ls)])]);
+
+disp('cos...')
+Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
+
+disp('sin...')
+Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
+
+disp('p...')
+p = chebfun('x', [0 K]);
+
+disp('a...')
+a  = chebfun(@(k) 2*k*sum( [0 1]*proj1(p)*j0(2*k*sqrt(p)) ), [0 K]);
+
+disp('b...')
+b  = chebfun(@(k) -2*beta*k*sum( [1 0]*proj1(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
 
 
 
@@ -131,5 +126,22 @@ j1 = chebfun(@(kx) besselj(1.0, kx), [0.0 max([2.0*K*max(sqrt(x + eta)) 2.0*K*sq
 %  export_fig('psi.png', '-m2', '-a4', '-painters');
 
 save('psi_phi')
+
+
+disp('data projection onto lamba = 0...')
+
+% proj[1] = psi    proj[2] = phi
+
+function proj = proj1(xx)
+    s = xx + eta(xx);
+    A = [0 1; beta^2*s 0];
+    B = [0 0; 1 0];
+    D = (1+eta_prime(xx))*eye(2) + u_prime(xx)*A;
+    phi0 = [u(xx) ; eta(xx)+(u(xx)^2)/2];
+    phi0_prime = [u_prime(xx); eta_prime(xx)+2*u(xx)*u_prime(xx)];
+    
+    proj = phi0 + u(xx)*(u_prime(xx)*inv(D)*B*phi0 - B*phi0-A*inv(D)*phi0_prime);
+end
+
 
 
