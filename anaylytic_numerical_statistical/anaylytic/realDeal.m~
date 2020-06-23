@@ -5,6 +5,8 @@ format longE
 
 addpath('export_fig/');
 
+global eta eta_prime u u_prime beta
+
 %%% Physical parameter:
 x0 = 5;
 K  = 4.0;		% upper bound in k domain [0, K]
@@ -61,20 +63,34 @@ j1 = chebfun(@(kx) besselj(1.0, kx), [0.0 max([2.0*K*max(sqrt(x + eta)) 2.0*K*sq
 disp('cos...')
 Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
 
-disp('sig...')
+disp('sin...')
 Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
 
-psi0 = chebfun(@(ss) proj1(ss)(2), [0 K], 'vectorize');
+ss = chebfun(@(xx) xx + eta(xx), [0 La*K]);
+A = [0 1; beta^2*ss 0];
+B = [0 0; 1 0];
+    
+    uiu = chebfun(@(x) 1, [0 20]);
 
-phi0 = chebfun(@(ss) proj1(ss)(1), [0 K], 'vectorize');
+    
+    
+D = chebfun(@(xx) eta_prime(xx)*eye(2), [0 20]);
+    D = (1+eta_prime(2))*eye(2);
+    disp(D)
+    disp(inv(D))
+    phi0 = [u(xx) ; eta(xx)+(u(xx)^2)/2];
+    phi0_prime = [u_prime(xx); eta_prime(xx)+2*u(xx)*u_prime(xx)];
+    
+    proj = phi0 + u(xx)*(u_prime(xx)*inv(D)*B*phi0 - B*phi0-A*inv(D)*phi0_prime);
 
-phi0 = psi0 = chebfun(@(ss) proj1(ss)(2), [0 K], 'vectorize');
+disp('p...')
+p = chebfun('x', [0 K]);
 
 disp('a...')
-a  = chebfun(@(k) 2*k*sum( proj1(ss)(2) *j0(2*k*sqrt(ss)) ), [0 K]);
+a  = chebfun(@(k) 2*k*sum( [0 1]*proj1(p)*j0(2*k*sqrt(p)) ), [0 K]);
 
 disp('b...')
-b  = chebfun(@(k) -2*beta*k*sum( proj1(ss)(1)*ss^(1/2)*j1(2*k*sqrt(ss)) ), [0 K]);
+b  = chebfun(@(k) -2*beta*k*sum( [1 0]*proj1(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
 
 
 
@@ -133,18 +149,8 @@ save('psi_phi')
 
 disp('data projection onto lamba = 0...')
 
-% proj[1] = psi    proj[2] = phi
 
-function proj = proj1(xx)
-    s = xx + eta(xx);
-    A = [0 1; beta^2*s 0];
-    B = [0 0; 1 0];
-    D = (1+eta_prime(xx))*eye(2) + u_prime(xx)*A;
-    phi0 = [u(xx) ; eta(xx)+(u(xx)^2)/2];
-    phi0_prime = [u_prime(xx); eta_prime(xx)+2*u(xx)*u_prime(xx)];
-    
-    proj = phi0 + u(xx)*(u_prime(xx)*inv(D)*B*phi0 - B*phi0-A*inv(D)*phi0_prime);
-end
+
 
 
 
