@@ -80,7 +80,7 @@ small_h = h(1:mm);
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
-w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) %- H2*exp(-c2*(xc - x2).^2);
+w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
 
 % time stepping:
 t0 = 0.0;
