@@ -66,28 +66,40 @@ Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
 disp('sin...')
 Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
 
-ss = chebfun(@(xx) xx + eta(xx), [0 La*K]);
-A = [0 1; beta^2*ss 0];
-B = [0 0; 1 0];
-    
-    uiu = chebfun(@(x) 1, [0 20]);
-
-    
-    
-D = chebfun(@(xx) eta_prime(xx)*eye(2), [0 20]);
-    D = (1+eta_prime(2))*eye(2);
-    disp(D)
-    disp(inv(D))
-    phi0 = [u(xx) ; eta(xx)+(u(xx)^2)/2];
-    phi0_prime = [u_prime(xx); eta_prime(xx)+2*u(xx)*u_prime(xx)];
-    
-    proj = phi0 + u(xx)*(u_prime(xx)*inv(D)*B*phi0 - B*phi0-A*inv(D)*phi0_prime);
-
 disp('p...')
 p = chebfun('x', [0 K]);
 
+
+s = @(x) x + eta(x);
+    A = @(x) [0 1; beta^2*s(x) 0]; %beta^2*s
+    B = [0 0; 1 0];
+    
+    
+    test1 = @(x) eta_prime(x).*eye(2);
+    test2 = @(x) u_prime(x)*A(x);
+    
+    D = @(x) eta_prime(x)*eye(2) + u_prime(x)*A(x);
+    
+    phi0 = @(x) [u(x) ; eta(x)+(u(x).^2)/2];
+    phi0_prime = @(x) [u_prime(x); eta_prime(x)+2*u(x)*u_prime(x)];
+    
+    proj = @(x) phi0(x) + u(x)*(u_prime(x)*inv(D(x))*B*phi0(x) - B.*phi0(x)-A(x)*inv(D(x))*phi0_prime(x));
+
+disp("Proj1")
+test = linspace(0,1,20);
+disp(size(D(1)))
+disp(size(test1(1)))
+disp(size(test2(1)))
+disp(size(test1(test)))
+disp(size(test2(test)))
+disp(size(D(test)))
+
+q = integral(proj,0,1);
+disp(p)
+
+
 disp('a...')
-a  = chebfun(@(k) 2*k*sum( [0 1]*proj1(p)*j0(2*k*sqrt(p)) ), [0 K]);
+a  = chebfun(@(k) 2*k*sum( [0 1]*proj(p)*j0(2*k*sqrt(p)) ), [0 K]);
 
 disp('b...')
 b  = chebfun(@(k) -2*beta*k*sum( [1 0]*proj1(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
