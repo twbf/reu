@@ -1,4 +1,4 @@
-load('psi_phi_old.mat')
+load('psi_phi_projection.mat')
 
 len = 160;
 

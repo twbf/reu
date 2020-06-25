@@ -1,0 +1,21 @@
+% proj[1] = psi    proj[2] = phi
+
+function [phi_0,psi_0] = array_proj (x)
+
+    % input array x is a list of values for which the projection should
+    % b
+
+    global proj
+    
+    test = linspace(0,1,20);
+
+    disp(size(test))
+
+    for i=1:size(test,2)
+        temp = proj(i)
+    
+        phi_0(i) = temp(1);
+        psi_0(i) = temp(2);
+    end
+    
+end
