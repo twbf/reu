@@ -1,60 +1,60 @@
-load('psi_phi_projection.mat')
+% Goal: For a given phi(s, lambda) and psi(s, lambda) compute eta, u, x, t
 
-len = 160;
+
+load('psi_phi_old.mat')
+
+%Parameters -----
+size = 100;  %resolution
+lambda_list = linspace(0, 9, size); %lambda space
+s = linspace(0.1, 9, size); %s space   note: at s = 0 regularization is needed - more on this later
 
 g = sqrt(9.81);
 
-xx = zeros(len, len);
-tt = zeros(len, len);
-hh = zeros(len, len);
-uu = zeros(len, len);
+x = zeros(size, size);
+t = zeros(size, size);
+h = zeros(size, size);
+u = zeros(size, size);
 
-t_list = linspace(0, 10, 100);
-x_list = loinspace(
-
-
-
-for i = 1:len
-    for j = 1:len
-        
-        s = i/16 ;
-        
-        lamda = j/16 -1/16;
-        
-        u = psi(s,lamda);
-
-        h = phi(s,lamda)-u^2/2;
-
-        x = s - h;
-
-        t = (u + lamda)/g;
-        
-        xx(i,j) = x;
-        tt(i,j) = t;
-        hh(i,j) = h;
-        uu(i,j) = u;
-        
-    end
+for i=1:size
+    lambda = lambda_list(i); %for a single lambda
+    
+    %CG transform from (s, lambda) to (x,t)
+    u(i,:) = psi(s,lambda);
+    h(i,:) = phi(s,lambda)-u(i,:).^2/2;
+    x(i,:) = s - h(i,:);
+    t(i,:) = (u(i,:) + lambda)/g;  % deminsionalizing
 end
-%scatter(xx,tt)
+
+% scatter() takes lists not matricies so x and t have to be reshaped
+xx = reshape(x, [size*size,1]);
+tt = reshape(t, [size*size,1]);
+
+figure(3);
+scatter(xx,tt);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 18);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 18);
+title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 13);
+export_fig('CG_coordinate_transform', '-m2', '-a4', '-painters');
+
+figure(1);
+mesh(x,t,h);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 12);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 12);
+zlabel('$\eta$', 'interpreter', 'LaTeX', 'fontsize', 12);
+title(' CG transformed $\eta$', 'interpreter', 'LaTeX', 'fontsize', 13);
+export_fig('CG_eta', '-m2', '-a4', '-painters');
+
+figure(2);
+mesh(x,t,u);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 12);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 12);
+zlabel('$\eta$', 'interpreter', 'LaTeX', 'fontsize', 12);
+title('CG transformed $u$', 'interpreter', 'LaTeX', 'fontsize', 13);
+export_fig('CG_u', '-m2', '-a4', '-painters');
 
 
 
-mesh(xx,tt,hh)
 
-%title(['$\eta(x,t)$ by CG Transform'], IN, 'latex', FS, 14);
-%xlabel('$x$', IN, 'latex', 'fontsize', 16);
-%ylabel('$t$', IN, 'latex', 'fontsize', 16);
-
-
-hh = reshape(hh, [len*len,1]);
-
-xx = reshape(xx, [len*len,1]);
-
-tt = reshape(tt, [len*len,1]);
-
-ana = scatteredInterpolant(xx,tt,hh,'natural','none')
+ana = scatteredInterpolant(xx,tt,hh);
 save('ana_interp1_0', 'ana')
-
-view(3)
 

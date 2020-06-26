@@ -1,75 +1,58 @@
-load('psi_phi_projection.mat')
+% Goal: For a given phi(s, lambda) and psi(s, lambda) compute eta, u, x, t
 
-len = 160;
+
+load('psi_phi_old.mat')
+
+%Parameters -----
+size = 100;  %resolution
+lambda_list = linspace(0, 9, size); %lambda space
+s = linspace(0.1, 9, size); %s space   note: at s = 0 regularization is needed - more on this later
 
 g = sqrt(9.81);
 
-x = zeros(len, len);
-t = zeros(len, len);
-h = zeros(len, len);
-u = zeros(len, len);
+x = zeros(size, size);
+t = zeros(size, size);
+h = zeros(size, size);
+u = zeros(size, size);
 
-lambda = linspace(0, 10, len);
-s = linspace(0, 10, len);
+for i=1:size
+    lambda = lambda_list(i); %for a single lambda
+    
+    %CG transform from (s, lambda) to (x,t)
+    u(i,:) = psi(s,lambda);
+    h(i,:) = phi(s,lambda)-u(i,:).^2/2;
+    x(i,:) = s - h(i,:);
+    t(i,:) = (u(i,:) + lambda)/g;  % deminsionalizing
+end
 
-u = psi(s,lamda);
-h = phi(s,lamda)-u^2/2;
-
-x = s - h;
-t = (u + lamda)/g;
-
-hh = reshape(h, [len*len,1]);
-xx = reshape(x, [len*len,1]);
-tt = reshape(t, [len*len,1]);
-uu = reshape(u, [len*len,1]);
-
-
-
-
-% for i = 1:len
-%     for j = 1:len
-%         
-%         s = i/16 ;
-%         
-%         lamda = j/16 -1/16;
-%         
-%         u = psi(s,lamda);
-% 
-%         h = phi(s,lamda)-u^2/2;
-% 
-%         x = s - h;
-% 
-%         t = (u + lamda)/g;
-%         
-%         xx(i,j) = x;
-%         tt(i,j) = t;
-%         hh(i,j) = h;
-%         uu(i,j) = u;
-%         
-%     end
-% end
-%scatter(xx,tt)
+% scatter() takes lists not matricies so x and t have to be reshaped
+xx = reshape(x, [size*size,1]);
+tt = reshape(t, [size*size,1]);
 
 figure(1);
-mesh(x,t,h);
-xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
-ylabel('$a(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-title('Coefficient $a(k)$', 'interpreter', 'LaTeX', 'fontsize', 13);
-export_fig('Free Surface area', '-m2', '-a4', '-painters');
+scatter(xx,tt);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
+title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 20);
+export_fig('CG_coordinate_transform', '-m2', '-a4', '-painters');
 
 figure(2);
-mesh(x,t,u);
-xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
-ylabel('$a(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-title('Coefficient $a(k)$', 'interpreter', 'LaTeX', 'fontsize', 13);
-export_fig('Speed', '-m2', '-a4', '-painters');
+mesh(x,t,h);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
+zlabel('$\eta$', 'interpreter', 'LaTeX', 'fontsize', 15);
+title(' CG transformed $\eta$', 'interpreter', 'LaTeX', 'fontsize', 20);
+export_fig('CG_eta', '-m2', '-a4', '-painters');
 
 figure(3);
-scatter(xx,tt);
-xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
-ylabel('$a(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-title('Coefficient $a(k)$', 'interpreter', 'LaTeX', 'fontsize', 13);
-export_fig('Free Surface area', '-m2', '-a4', '-painters');
+mesh(x,t,u);
+xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
+ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
+zlabel('$u$', 'interpreter', 'LaTeX', 'fontsize', 15);
+title('CG transformed $u$', 'interpreter', 'LaTeX', 'fontsize', 20);
+export_fig('CG_u', '-m2', '-a4', '-painters');
+
+
 
 
 ana = scatteredInterpolant(xx,tt,hh);
