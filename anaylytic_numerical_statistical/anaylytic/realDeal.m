@@ -9,7 +9,7 @@ global proj
 
 %%% Physical parameter:
 x0 = 5;
-K  = 4.0;		% upper bound in k domain [0, K]
+K  = 20.0;		% upper bound in k domain [0, K]
 L  = 20.0;		% upper bound in x domain [0, L]
 Ls = 10.0;		% upper bound for s parameter
 La = 10.0;		% upper bound for lambda parameter
@@ -19,9 +19,9 @@ La = 10.0;		% upper bound for lambda parameter
 m = Inf;
 beta = 1;
 
-disp('eta, eta_prime, u....')
+disp('eta, eta_prime, u, u_prime....')
 
-H1 = 1.006;
+H1 = 0.006;
 H2 = 0.018;
 c1 = 0.4444;
 c2 = 4.0;
@@ -36,23 +36,14 @@ u   = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);
 u_prime = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);  %needs to change
 
 %Plotting gamma
-%     t = linspace(0,10,100);
-%     fir = t+eta(t);
-%     sec = -u(t);
-%     scatter(fir,sec)
+figure(1);
+t = linspace(0,10,100);
+fir = t+eta(t);
+sec = -u(t);
+scatter(fir,sec)
+export_fig('gamma.png', '-m2', '-a4', '-painters');
 
 %data projection to lambda = 0
-%I can make this faster by setting variables
-
-
- %figure(1);
- %plot(eta)
- %xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 12);
- %ylabel('$\eta(x)$', 'interpreter', 'LaTeX', 'fontsize', 12);
- %title('Initial free surface elevation');
- %set(gcf, 'color', 'w');
- %export_fig('Eta.png', '-m2', '-a4', '-painters');
-
 
 disp('j0...')
 j0 = chebfun(@(kx) besselj(0.0, kx), [0.0 max([2.0*K*max(sqrt(xx + eta)) 2.0*K*sqrt(Ls)])]);
@@ -79,10 +70,7 @@ D = @(x) eta_prime(x)*eye(2) + u_prime(x)*A(x);
 phi0 = @(x) [u(x) ; eta(x)+(u(x).^2)/2];
 phi0_prime = @(x) [u_prime(x); eta_prime(x)+2*u(x)*u_prime(x)];
     
-%proj = @(x) phi0(x) + u(x)*(u_prime(x)*inv(D(x))*B*phi0(x) - B*phi0(x) -A(x)*inv(D(x))*phi0_prime(x));
-proj = @(x) inv(D(x));
-
-%[phi_0, psi_0] = @(x) array_proj(x);
+proj = @(x) phi0(x) + u(x)*(u_prime(x)*inv(D(x))*B*phi0(x) - B*phi0(x) -A(x)*inv(D(x))*phi0_prime(x));
 
 %plotting 
 
@@ -90,7 +78,7 @@ proj = @(x) inv(D(x));
 disp('a...')
 a  = chebfun(@(k) 2*k*sum( psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
   
-  figure(1);
+  figure(2);
   plot(a, '-', 'LineWidth', 2.0), grid off
   xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
   ylabel('$a(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
@@ -101,7 +89,7 @@ a  = chebfun(@(k) 2*k*sum( psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
 disp('b...')
 b  = chebfun(@(k) -2*beta*k*sum( phi_0(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
 
-  figure(2);
+  figure(3);
   plot(b, '-', 'LineWidth', 2.0), grid off
   xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
   ylabel('$b(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
@@ -115,7 +103,7 @@ k   = chebfun('x', [0 K]);
 disp('phi...')
 psi   = chebfun2(@(s,la) sum( ( a(k)*Cos(la*k) + b(k)*Sin(la*k) ) * j0(2.0*k*sqrt(s)) ), [0 Ls 0 La], 'vectorize');
 
-  figure(3);
+  figure(4);
   plot(psi);
   xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
   ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
@@ -127,7 +115,7 @@ psi   = chebfun2(@(s,la) sum( ( a(k)*Cos(la*k) + b(k)*Sin(la*k) ) * j0(2.0*k*sqr
 disp('psi...')
 phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) + b(k)*Cos(la*k) ) * j1(2.0*k*sqrt(s)) ), [0.01 Ls 0.01 La], 'vectorize');
   
-  figure(4);
+  figure(5);
   plot(phi);
   xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
   ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
@@ -139,62 +127,6 @@ phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) + b(k)*Cos(la*k) ) * j1(2.
 disp('saving ...')
 save('psi_phi_projection')
 disp('done')
-
-
-%if initial velocity = 0
-
-% disp('a....')
-% a  = chebfun(@(k) 2*k*sum(eta(x).*j0(2.0*k*sqrt(x + eta(x))).*(1 + eta_prime(x))), [0 K]);
-% 
-% disp('done')
-% 
-%  figure(2);
-%  plot(a, '-', 'LineWidth', 2.0), grid off
-%  xlabel('$k$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  ylabel('$a(k)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  title('Coefficient $a(k)$', 'interpreter', 'LaTeX', 'fontsize', 13);
-%  set(gcf, 'color', 'w');
-%  export_fig('Eta1.png', '-m2', '-a4', '-painters');
-% 
-% disp('phi....')
-% 
-% Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
-% k   = chebfun('x', [0 K]);
-% phi   = chebfun2(@(s,la) sum(a(k)*Cos(la*k)*j0(2.0*k*sqrt(s))), [0 Ls 0 La], 'vectorize');
-% 
-% 
-%  figure(3);
-%  plot(phi);
-%  xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  view([0 90]); colorbar;
-%  title('Phi Two-parameters integral $f(s,\lambda)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  set(gcf, 'color', 'w');
-%  export_fig('phi.png', '-m2', '-a4', '-painters');
-% 
-%  disp('done')
-% disp(phi(1,2))
-% 
-%  disp('psi...')
-% 
-% Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
-% psi = chebfun2(@(s,la) s^(-1/2)*sum(a(k)*Sin(la*k)*j1(2.0*k*sqrt(s))), [0.01 Ls 0.01 La], 'vectorize');
-% 
-% disp('done')
-% 
-%  figure(4);
-%  plot(psi);
-%  xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  view([0 90]); colorbar;
-%  title('Psi Two-parameters integral $f(s,\lambda)$', 'interpreter', 'LaTeX', 'fontsize', 12);
-%  set(gcf, 'color', 'w');
-%  export_fig('psi.png', '-m2', '-a4', '-painters');
-
-save('psi_phi')
-
-
-disp('data projection onto lamba = 0...')
 
 
 

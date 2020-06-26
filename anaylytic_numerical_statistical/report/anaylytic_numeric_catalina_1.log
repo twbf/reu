@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  24 JUN 2020 20:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  25 JUN 2020 15:40
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -181,31 +181,31 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 43--44
 <ana.png, id=21, 1124.2pt x 843.15pt>
 File: ana.png Graphic file (type png)
 <use ana.png>
-Package pdftex.def Info: ana.png  used on input line 72.
+Package pdftex.def Info: ana.png  used on input line 81.
 (pdftex.def)             Requested size: 345.0pt x 258.74925pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 72--73
-[][] 
- []
-
-<diff.png, id=22, 1124.2pt x 843.15pt>
-File: diff.png Graphic file (type png)
-<use diff.png>
-Package pdftex.def Info: diff.png  used on input line 78.
-(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
-
-Overfull \hbox (15.0pt too wide) in paragraph at lines 78--79
+Overfull \hbox (15.0pt too wide) in paragraph at lines 81--82
 [][] 
  []
 
 [3 <./ana.png (PNG copy)>]
+<diff.png, id=26, 1124.2pt x 843.15pt>
+File: diff.png Graphic file (type png)
+<use diff.png>
+Package pdftex.def Info: diff.png  used on input line 87.
+(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+
+Overfull \hbox (15.0pt too wide) in paragraph at lines 87--88
+[][] 
+ []
+
 <l2.png, id=27, 1124.2pt x 843.15pt>
 File: l2.png Graphic file (type png)
 <use l2.png>
-Package pdftex.def Info: l2.png  used on input line 83.
+Package pdftex.def Info: l2.png  used on input line 92.
 (pdftex.def)             Requested size: 345.0pt x 258.74925pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 83--84
+Overfull \hbox (15.0pt too wide) in paragraph at lines 92--93
 [][] 
  []
 
@@ -214,11 +214,11 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 83--84
 Here is how much of TeX's memory you used:
  1806 strings out of 480608
  24723 string characters out of 5903631
- 263535 words of memory out of 5000000
+ 264535 words of memory out of 5000000
  17713 multiletter control sequences out of 15000+600000
  537413 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,7n,25p,284b,195s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,13n,25p,269b,195s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2020/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
@@ -231,7 +231,7 @@ ic/amsfonts/cm/cmr5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmr7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsf
 onts/cm/cmsy7.pfb>
-Output written on anaylytic_numeric_catalina_1.pdf (5 pages, 818391 bytes).
+Output written on anaylytic_numeric_catalina_1.pdf (5 pages, 821893 bytes).
 PDF statistics:
  69 PDF objects out of 1000 (max. 8388607)
  45 compressed objects within 1 object stream

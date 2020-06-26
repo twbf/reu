@@ -34,8 +34,8 @@ close all
 format longE
 
 %%% Libraries we use:
-addpath('numerical/sources/');
-addpath('numerical/odetpbar/');
+addpath('sources/');
+addpath('odetpbar/');
 
 %%% Global variables:
 global cf2 d xc FS IN LW
@@ -57,16 +57,16 @@ b  = 33.5;	% the right boundary (wall)
 td = 10.0/10.0;
 
 %%% Initial condition parameters:
-H1 = 1.006;
-H2 = 0.00;
-c1 = 1.0;
-c2 = 1.0;
-x1 = 3.5;
+H1 = 0.006;
+H2 = 0.018;
+c1 = 0.4444;
+c2 = 4.0;
+x1 = 4.1209;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 6000;							% number of grid points
-x  = linspace(a, b, N+1);			% cell interfaces
+N  = 2000;							% number of grid points
+x  = linspace(a, b, N+1)';			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
@@ -81,6 +81,7 @@ small_h = h(1:mm);
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
 w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
+w0(N:2*N) = -0.0000001;
 
 % time stepping:
 t0 = 0.0;
@@ -127,7 +128,9 @@ end
 
 %adding bathymetry
 
-hh = zeros(mm,M)
+figure(1);
+
+hh = zeros(mm,M);
 for i=1:mm
     for j=1:M
         if solpr(i,j)<0.01 &&  solpr(i,j)>-0.01
@@ -138,6 +141,7 @@ for i=1:mm
     end
 end
 
+figure(2);
 mesh(hh);
 title(['$\eta(x,t)$ by FVM'], IN, 'latex', FS, 14);
 xlabel('$x$', IN, 'latex', 'fontsize', 16);
@@ -149,7 +153,9 @@ xx = reshape(x_mat, [mm*M,1]);
 
 tt = reshape(t_mat, [mm*M,1]);
 
-num = scatteredInterpolant(xx,tt,hh)
+figure(3);
+
+num = scatteredInterpolant(xx,tt,hh);
 save('num_interp1', 'num')
 
 %%% Extraction of run-up data:

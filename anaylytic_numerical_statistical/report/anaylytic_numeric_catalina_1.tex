@@ -48,8 +48,8 @@ Chebfun was used to calculate the Hankel transform solution to the CG transform 
 
 \[
 \begin{aligned}
-\psi (s, \lambda ) = \int_{0}^\infty (a(k)cos(\beta k \lambda)+b(k)*sin(\beta k \lambda) )dk \\
-\phi (s, \lambda ) =  \\
+\psi (s, \lambda ) = \int_{0}^\infty (a(k)cos(\beta k \lambda)+b(k)sin(\beta k \lambda)) J_0(2 k \sqrt s ) dk\\
+\varphi (s, \lambda ) =  s^{-1/2} \int_{0}^\infty (a(k)sin(\beta k \lambda)+b(k)cos(\beta k \lambda)) J_1(2 k \sqrt s )dk \\
 \end{aligned}
 \]
 
@@ -57,15 +57,24 @@ where
 
 \[
 \begin{aligned}
-a(k) = e^{-(x-3.5)^2} \\
-b(k) =  \\
+a(k) = 2k \int_{0}^\infty \psi(s*,0) J_0(2 k \sqrt {s*})ds*\\
+b(k) = 2k \int_{0}^\infty \varphi(s*,0) s*^{1/2} J_1(2 k \sqrt {s*})ds*\\
 \end{aligned}
 \]
 
+and the projection of $\varphi$ and $\psi$ onto $\lambda = 0$ were computed via a first order taylor expansion. Note that these eqautions require $\eta_0^\prime(x) > -1$.  See Nicolsky for derivation.
+
 \[
 \begin{aligned}
-a(k) = e^{-(x-3.5)^2} \\
-b(k) =  \\
+\Phi (s,\lambda) = \begin{pmatrix}
+\varphi(s,\lambda) \\
+\psi(s,\lambda)
+\end{pmatrix} \\
+\Phi_0(x) =  \begin{pmatrix}
+u_0(x) \\
+\eta_0(x) + u_0^2(x)/2
+\end{pmatrix} \\
+\Phi_1 = \Phi_0 + u_0(u_0^\prime A D^{-1} B \Phi_0 - B \Phi_0 - A D^{-1} \Phi_0^\prime)
 \end{aligned}
 \]
 
