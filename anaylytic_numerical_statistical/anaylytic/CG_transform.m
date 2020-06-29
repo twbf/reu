@@ -25,9 +25,11 @@ for i=1:size
     t(i,:) = (u(i,:) + lambda)/g;  % deminsionalizing
 end
 
-% scatter() takes lists not matricies so x and t have to be reshaped
+% scatter() and scatteredInterpolant() takes lists not matricies so x and t have to be reshaped
 xx = reshape(x, [size*size,1]);
 tt = reshape(t, [size*size,1]);
+hh = reshape(h, [size*size,1]);
+uu = reshape(u, [size*size,1]);
 
 figure(1);
 scatter(xx,tt);
@@ -53,8 +55,11 @@ title('CG transformed $u$', 'interpreter', 'LaTeX', 'fontsize', 20);
 export_fig('CG_u', '-m2', '-a4', '-painters');
 
 
+%interpolating mesh in order to get a smooth polynomial curve
+analytic_eta = scatteredInterpolant(xx,tt,hh);
+save('analytic_eta', 'analytic_eta');
 
 
-ana = scatteredInterpolant(xx,tt,hh);
-save('ana_interp1_0', 'ana')
+analytic_u = scatteredInterpolant(xx,tt,u);
+save('analytic_u', 'analytic_u');
 

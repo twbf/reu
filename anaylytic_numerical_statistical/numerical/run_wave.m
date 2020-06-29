@@ -51,8 +51,8 @@ g  = 9.8;	% gravity acceleration
 g2 = 0.5*g;	% g/2
 cf2 = 0.0;	% friction coefficient
 
-a  = -2.5;	% the left boundary (incident wave)
-b  = 33.5;	% the right boundary (wall)
+a  = -2;	% the left boundary (incident wave)
+b  = -34;	% the right boundary (wall)
 % Bottom slope:
 td = 10.0/10.0;
 
@@ -65,7 +65,7 @@ x1 = 4.1209;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 2000;							% number of grid points
+N  = 6000;							% number of grid points
 x  = linspace(a, b, N+1)';			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
@@ -81,11 +81,11 @@ small_h = h(1:mm);
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
 w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
-w0(N:2*N) = -0.0000001;
+w0(N:2*N) = 0.000000;
 
 % time stepping:
 t0 = 0.0;
-Tf = 3.30; % final simulation time (the same as experiment)
+Tf = 3.23; % final simulation time (the same as experiment)
 
 %%% Plot the initial condition to check:
 amp = 1.5*H2;
@@ -155,8 +155,8 @@ tt = reshape(t_mat, [mm*M,1]);
 
 figure(3);
 
-num = scatteredInterpolant(xx,tt,hh);
-save('num_interp1', 'num')
+%num = scatteredInterpolant(xx,tt,hh);
+%save('num_interp1', 'num')
 
 %%% Extraction of run-up data:
 Rup = smooth(Rup, 7);
