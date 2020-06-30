@@ -1,1 +1,11 @@
 This is so we can keep track of all the .mat files
+
+NUMERIC
+num_interp_cat1_0u  catalina 1 initial conditions 0 initial velocity 12000 points -1 slope
+num_interp_cat1_0u_1s same but 0.1 slope
+
+CATALINA 1 ANAYLYTIC PHI PSI
+psi_phi_projection_cat1_0u catalina 1 initial conditions 0 initial velocity - 1 slope
+
+CATALINA 1 ANAYLYTIC ETA
+analytic_eta_s1  from phi_psi_projection slope- 0.1

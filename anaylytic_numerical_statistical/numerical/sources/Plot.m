@@ -13,9 +13,9 @@ function Plot (t, w)
     global FS IN LW	
 	global a amp b td h xc N
 
-	plot(xc, w(1:N) - h, '-', LW, 2.2), hold on, grid on
+	plot(xc, w(N:2*N-1) - h, '-', LW, 2.2), hold on, grid on
     plot(xc, -h, '-', LW, 2.2), hold off
-    xlim([-0.5 1.5]);
+    xlim([-0.5 7]);
     xlabel('$x$', IN, 'latex', 'fontsize', 16);
     ylabel('$\eta(x,t)$', IN, 'latex', FS, 16);
     title(['Free surface elevation at $t = $ ',num2str(t,'%5.2f'), ' s'], IN, 'latex', FS, 14);

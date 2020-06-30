@@ -19,6 +19,7 @@ La = 10.0;		% upper bound for lambda parameter
 m = Inf;
 beta = 1;
 
+
 disp('eta, eta_prime, u, u_prime....')
 
 H1 = 0.006;
@@ -32,8 +33,15 @@ xx   = chebfun('x', [0 L]);
 eta = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [0 L]);
 eta_prime = chebfun(@(x) -2*H1*c1*(x-x1)*exp(-c1*(x - x1).^2) + -2*H2*c2*(x-x2)*exp(-c2*(x - x2).^2), [0 L]);
 
-u   = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);
-u_prime = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);  %needs to change
+
+%Catalina 1 speed
+%u   = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);
+%u_prime = chebfun(@(x) -( ( eta(x)/(2*sqrt(x)) + sqrt(x)*eta_prime(x) )/x ), [0 L]);  %needs to change
+
+%Zero-initial velocity
+
+u   = chebfun(@(x) 0, [0 L]);
+u_prime = chebfun(@(x)  0, [0 L]);
 
 %Plotting gamma
 figure(1);
@@ -125,7 +133,7 @@ phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) + b(k)*Cos(la*k) ) * j1(2.
   export_fig('phi.png', '-m2', '-a4', '-painters');
 
 disp('saving ...')
-save('psi_phi_projection')
+save('psi_phi_projection_cat1_0u')
 disp('done')
 
 

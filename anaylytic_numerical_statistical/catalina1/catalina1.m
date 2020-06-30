@@ -32,24 +32,35 @@ disp('j0...')
 j0 = chebfun(@(kx) besselj(0.0, kx), [0 K]);
 
 disp('j1...')
-j1 = chebfun(@(kx) besselj(1.0, kx), [0 K]);
+j1 = chebfun(@(kx) besselj(1.0, kx), [0 K*10]);
 
 disp('cos...')
-Cos = chebfun(@(lk) cos(lk), [0 K], 'vectorize');
+Cos = chebfun(@(lk) cos(lk), [0 K*10], 'vectorize');
 
 disp('sin...')
-Sin = chebfun(@(lk) sin(lk), [0 K], 'vectorize');
+Sin = chebfun(@(lk) sin(lk), [0 K*10], 'vectorize');
 
 xi = chebfun('x', [0 K]);
 
-omega = chebfun('x', [0 10]);
+omega = chebfun('x', [0 K]);
 
-inner_e_sl_1 = chebfun3(@(lambda, sigma, xxi) sum( j0(omega*sigma) * j1(omega*xxi) * Cos(omega*lambda) ), [0, K]);
+disp('2...');
 
-inner_e_sl_2 = chebfun(@(lambda, sigma, xi) sum( j1(omega*sigma)/sigma * j1(omega*xi) * Sin(omega*lambda) ), [0, K]);
+inner_e_sl_2 = chebfun3(@(lambda, sigma, xii) sum( j1(omega*sigma)/sigma * j1(omega*xii) * Sin(omega*lambda) ), [0 .1 0.01 1 0 .1], 'vectorize');
 
-eta_sl_1 = @(sigma, lamba) chebfun(sum( xi^2*Phi(sigma) * inner_e_sl_1(lambda, sigma, xi)), [0,K]);
-eta_sl_2 = @(sigma, lamba) chebfun(sum( xi^2*Phi(sigma) * inner_e_sl_2(lambda, sigma, xi)), [0,K]);
+
+disp('1...');
+
+inner_e_sl_1 = chebfun3(@(lambda, sigma, xii) sum( j0(omega*sigma) * j1(omega*xii) * Cos(omega*lambda) ), [0 .1 0.01 .1 0 1.], 'vectorize');
+
+
+disp('3...');
+
+eta_sl_1 = chebfun2( @(sigma, lambda) sum( xi^2*Phi(sigma) * inner_e_sl_1(lambda, sigma, xi)), [0.01 .1 0 .1], 'vectorize');
+
+disp('4...');
+
+eta_sl_2 = chebfun2( @(sigma, lambda) sum( xi^2*Phi(sigma) * inner_e_sl_2(lambda, sigma, xi)), [0.01 .1 0 .1], 'vectorize');
 
 eta_sl = @(sigma,lambda) -1/4*eta_sl_1(sigma, lambda) -1/2*eta_sl_2(sigma, lambda);
 
