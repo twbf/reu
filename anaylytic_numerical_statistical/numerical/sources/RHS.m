@@ -1,7 +1,7 @@
 %%% -------------------------------------------------- %%%
 %%% Author: Denys Dutykh, CNRS -- LAMA, Univ of Savoie %%%
 %%% E-mail: Denys.Dutykh@univ-savoie.fr                %%%
-%%% Web:    http://www.denys-dutykh.com/               %%%
+%%% Web:    http//www.denys-dutykh.com/               %%%
 %%% Blog:   http://dutykh.github.io/                   %%%
 %%% GitHub: https://github.com/dutykh/                 %%%
 %%% -------------------------------------------------- %%%

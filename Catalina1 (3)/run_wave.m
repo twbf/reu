@@ -51,8 +51,8 @@ g  = 9.8;	% gravity acceleration
 g2 = 0.5*g;	% g/2
 cf2 = 0.0;	% friction coefficient
 
-a  = -2.5;	% the left boundary (incident wave)
-b  = 69.5;	% the right boundary (wall)
+a  = -2.0;	% the left boundary (incident wave)
+b  = 10.0;	% the right boundary (wall)
 % Bottom slope:
 td = 1.0/10.0;
 
@@ -65,7 +65,7 @@ x1 = 4.1209;
 x2 = 1.6384;
 
 %%% Numerical parameters:
-N  = 12000;							% number of grid points
+N  = 2000;							% number of grid points
 x  = linspace(a, b, N+1)';			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
@@ -73,29 +73,20 @@ xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 %%% Bathymetry function:
 h  = td*xc;
 
-mm=2000;
-
-small_h = h(1:mm);
-
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
 w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
 
-
-%w0(N:2*N-1) = -(w0(1:N)-max(h, eps+0*h))./sqrt(xc); %added a -1
-
-w0(N+10:2*N-10) = 0.0001;
-
 % time stepping:
 t0 = 0.0;
-Tf = 3.23; % final simulation time (the same as experiment)
+Tf = 10.0; % final simulation time (the same as experiment)
 
 %%% Plot the initial condition to check:
 amp = 1.5*H2;
 figure;
 set(gcf, 'pos', [1 621 903 353]);
-%Plot(t0, w0);
+% Plot(t0, w0);
 
 %%% We run the simulation:
 options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
@@ -112,57 +103,11 @@ solpr = deval(sol, tlist);
 Rup = zeros(M,1);
 for t=1:M % loop in time
     ind = find(solpr(1:N,t) > 1e-2, 1, 'first');
-    
-    
     Rup(t) = -h(ind);
 
-	%Plot(tlist(t), solpr(:,t));
+	Plot(tlist(t), solpr(:,t));
 end % for t
 Rup = Rup - Rup(1);
-
-x_mat = zeros(mm,M);
-
-t_mat = zeros(mm,M);
-
-for i=1:mm
-    t_mat(i,:) = tlist;
-end
-
-for j=1:M
-    x_mat(:,j)= linspace(-2, 10, mm);
-end
-
-%adding bathymetry
-
-figure(1);
-
-hh = zeros(mm,M);
-for i=1:mm
-    for j=1:M
-        if solpr(i,j)<0.0001 &&  solpr(i,j)>-0.0001
-            hh(i,j) = 0;
-        else
-            hh(i,j) = (solpr(i,j)-small_h(i));
-        end
-    end
-end
-
-figure(2);
-mesh(hh);
-title(['$\eta(x,t)$ by FVM'], IN, 'latex', FS, 14);
-xlabel('$x$', IN, 'latex', 'fontsize', 16);
-ylabel('$t$', IN, 'latex', 'fontsize', 16);
-
-hh = reshape(hh, [mm*M,1]);
-
-xx = reshape(x_mat, [mm*M,1]);
-
-tt = reshape(t_mat, [mm*M,1]);
-
-figure(3);
-
-num = scatteredInterpolant(xx,tt,hh);
-save('num_interp_cat1_0u_1s', 'num')
 
 %%% Extraction of run-up data:
 Rup = smooth(Rup, 7);
