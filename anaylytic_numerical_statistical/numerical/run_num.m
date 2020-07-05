@@ -70,9 +70,12 @@ function [eta, u] = run_num()
 
     %%% Choice of the initial condition:
     w0 = zeros(2*N,1);
+
     w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
+
     w0(1:N) = w0(1:N) + eta_0(xc);
-    %w0(N:2*N-1) = u_0(xc); %-1 is because XC isnt long enough FIXME
+
+    w0(N+1:2*N,1) = u_0(xc); %-1 is because XC isnt long enough FIXME
 
     %%% Plot the initial condition to check:
     amp = 1.5*H2;
@@ -82,7 +85,7 @@ function [eta, u] = run_num()
 
     %%% We run the simulation:
     options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
-    fprintf('Simulation...\n');
+    fprintf('Numeric Simulation...\n');
     sol = ode23(@RHS, [t0 Tf], w0, options);
     fprintf(' Done\n');
 
@@ -124,9 +127,9 @@ function [eta, u] = run_num()
     uu = zeros(mm,M);
     for i=1:mm
       for j=1:M
-          
+
         uu(i,j) = solpr(N + i,j);
-          
+
         if solpr(i,j)<0.0001 &&  solpr(i,j)>-0.0001
             hh(i,j) = 0;
         else
@@ -142,10 +145,8 @@ function [eta, u] = run_num()
     %     ylabel('$t$', IN, 'latex', 'fontsize', 16);
 
     hh = reshape(hh, [mm*M,1]);
-    uu = reshape(hh, [mm*M,1]);
-
+    uu = reshape(uu, [mm*M,1]);
     xx = reshape(x_mat, [mm*M,1]);
-
     tt = reshape(t_mat, [mm*M,1]);
 
     % figure(3);

@@ -1,86 +1,36 @@
-load('ana_interp1')
-load('num_interp1')
 
-size = 1000;
+function [diff, l2] = stat(f, g, size)
 
-dx = 1/110;
-dt = 1/330;
+    global t0 Tf x0 Xf
 
-diff = zeros(size,size);
+    num_x = size;
+    num_t = size;
 
-l2 = zeros(size);
+    t_list = linspace(t0, Tf, num_t);
+    x_list = linspace(x0, Xf, num_x);
 
-numerical = zeros(size,size);
+    difference = zeros(size,size);
+    l2 = zeros(size);
 
-anaylytic = zeros(size,size);
-
-for j=1:size
-    for i=1:size
-    
-        x = dx*i;
-        t = dt*j;
-        
-        numerical(i,j) = num(x-2,t);
-        
-        if numerical(i,j) == 0
-            anaylytic(i,j) == 0;
-        else
-            anaylytic(i,j) = ana(x-2.5,t);
+    for t=1:num_t
+        for x=1:num_x
+            difference(x,t) = f(x_list(x),t_list(t)) - g(x_list(x),t_list(t));
         end
-        
-        diff(i,j) = anaylytic(i,j)-numerical(i,j);
-        
+        l2(t) = norm(difference(:,t),2);
     end
-    
-    l2(j) = norm(diff(:,j),2);
+
+    xx = zeros(size, size);
+    tt = zeros(size, size);
+
+    for i=1:size
+      tt(i,:) = t_list;
+      xx(:,i) = x_list;
+    end
+
+    xx = reshape(xx, [size * size,1]);
+    tt = reshape(tt, [size * size,1]);
+    difference = reshape(difference, [size * size,1]);
+
+    diff = scatteredInterpolant(xx,tt,difference);
+
 end
-
-
-xx = zeros(size,size);
-
-tt = zeros(size,size);
-
-tt_1 = zeros(size);
-
-for i=1:size
-    tt(i,:) = linspace(0,size*dt,size);
-    
-    tt_1 = linspace(0,size*dt,size);
-end
-
-for j=1:size
-    xx(:,j)= linspace(-2.5,size*dx-2.5,size);
-end
-
-
-
-
-figure(1)
-mesh(xx,tt,numerical)
-title(['Numerical Solution (Deny FV)'], IN, 'latex', FS, 14);
-xlabel('$x$', IN, 'latex', 'fontsize', 16);
-ylabel('$t$', IN, 'latex', 'fontsize', 16);
-
-figure(2)
-mesh(xx,tt,anaylytic)
-title(['Anaylytical Solution (Nicolsky et al. 2018)'], IN, 'latex', FS, 14);
-xlabel('$x$', IN, 'latex', 'fontsize', 16);
-ylabel('$t$', IN, 'latex', 'fontsize', 16);
-
-figure(3)
-mesh(xx,tt,diff)
-title(['Anaylytical-Numerical Difference'], IN, 'latex', FS, 14);
-xlabel('$x$', IN, 'latex', 'fontsize', 16);
-ylabel('$t$', IN, 'latex', 'fontsize', 16);
-
-
-figure(4)
-plot(tt_1, l2)
-title(['L2 Norm of the differnce for each $t$'], IN, 'latex', FS, 14);
-xlabel('$t$', IN, 'latex', 'fontsize', 16);
-ylabel('L2 Norm', IN, 'latex', 'fontsize', 16);
-
-
-
-
-
