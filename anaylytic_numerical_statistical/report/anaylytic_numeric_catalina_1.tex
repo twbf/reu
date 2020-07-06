@@ -1,7 +1,9 @@
 \documentclass{article}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\title{IVP Analytic vs. Numerical Solution}
+\title{ IVP Analytic vs. Numerical Solution \\ \\
+	\large NOAA vs. Nicolksy 2018 vs. FVM
+}
 
 \begin{document}
 
@@ -9,7 +11,20 @@
 
 \section{Problem}
 
-Compare the analytic and numerical solution of $\eta$ of the following shallow water problem:
+To compare a NOAA's analytyic solution, Nicolksy 2018 Analytic, and a finite volume numerical solutions of $\eta$ of the following two shallow water problems:
+
+\subsection {A zero initial velocity N wave}
+
+\[
+\begin{aligned}
+\eta = e^{-(x-3.5)^2} \\
+u = 0 \\
+h = x \\
+m = \infty  \\
+\end{aligned}
+\]
+
+\subsection{An N wave with initial velocity}
 
 \[
 \begin{aligned}

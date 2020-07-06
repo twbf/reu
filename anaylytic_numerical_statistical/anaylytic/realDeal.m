@@ -3,15 +3,12 @@
 
 function [psi, phi] = realDeal(data_proj, zero_inital_u)
 
-    addpath('export_fig/');
-
-    %in order to do data projextion
-    global proj
+    %addpath('export_fig/');
 
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime t0 Tf x0 Xf
 
     %%% Physical parameter:
-    K  = 2.0;		% upper bound in k domain [0, K]
+    K  = 10.0;		% upper bound in k domain [0, K]
     L  = 20.0;		% upper bound in x domain [0, L]
     Ls = 10.0;		% upper bound for s parameter
     La = 10.0;		% upper bound for lambda parameter
@@ -26,8 +23,8 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     t = linspace(t0,Tf,100);
     fir = t+eta_0(t);
     sec = -u_0(t);
-    scatter(fir,sec)
-    export_fig('gamma.png', '-m2', '-a4', '-painters');
+    %scatter(fir,sec)
+    %export_fig('gamma.png', '-m2', '-a4', '-painters');
 
     xx   = chebfun('x', [0 L]);
 
@@ -57,7 +54,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         D = @(x) eta_prime(x)*eye(2) + u_prime(x)*A(x);
 
         phi0 = @(x) [u_0(x) ; eta_0(x)+(u_0(x).^2)/2];
-        phi0_prime = @(x) [u_prime(x); eta_prime(x)+2*u(x)*u_prime(x)];
+        phi0_prime = @(x) [u_prime(x); eta_prime(x)+2*u_0(x)*u_prime(x)];
 
         proj = @(x) phi0(x) + u_0(x)*(u_prime(x)*inv(D(x))*B*phi0(x) - B*phi0(x) -A(x)*inv(D(x))*phi0_prime(x));
 
@@ -80,16 +77,16 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
 
         disp('non zero_velocity and no data projection')
         disp('phi_0 and psi_0 ...')
-        phi_0 = @(x) u_0(x);
-        psi_0 = @(x) eta_0(x)+(u_0(x).^2)/2;
+        reg_phi_0 = @(x) u_0(x);
+        reg_psi_0 = @(x) eta_0(x)+(u_0(x).^2)/2;
 
         p = chebfun('x', [0 K]);
 
         disp('a...')
-        a  = chebfun(@(k) 2*k*sum( psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
+        a  = chebfun(@(k) 2*k*sum( reg_psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
 
         disp('b...')
-        b  = chebfun(@(k) -2*beta*k*sum( phi_0(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
+        b  = chebfun(@(k) -2*beta*k*sum( reg_phi_0(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
 
     end
 
@@ -141,5 +138,29 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     disp('saving ...')
     save('psi_phi_projection_cat1_0u')
     disp('done')
+
+    function phi = phi_0(x)
+
+        % input array x is a list of values for the projection
+        % note: memory should be reaalocated
+
+        for i=1:size(x,2)
+            tmp = proj(x(i));
+            phi(i) = tmp(1);
+        end
+
+    end
+
+    function psi = psi_0(x)
+
+        % input array x is a list of values for the projection
+        % note: memory should be reaalocated
+
+        for i=1:size(x,2)
+            tmp = proj(x(i));
+            psi(i) = tmp(2);
+        end
+
+    end
 
 end

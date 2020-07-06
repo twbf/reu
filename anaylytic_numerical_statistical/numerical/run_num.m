@@ -42,6 +42,9 @@ function [eta, u] = run_num()
     %IC variables from run.m
     global H1 H2 c1 c2 x1 x2 eta_0 u_0 td t0 Tf x0 Xf
 
+    disp(" ")
+    disp("Deny's Numeric:");
+
     FS = 'FontSize';
     IN = 'Interpreter';
     LS = 'LineStyle';

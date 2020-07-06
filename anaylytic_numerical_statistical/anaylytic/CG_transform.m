@@ -4,19 +4,19 @@ function [ana_eta, ana_u] = CG_transform(load, size, data_proj, zero_inital_u)
 
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
 
+    disp(" ")
+    disp("Nicolcsky Anaylytic:");
+
     if load
         load('psi_phi_projection.mat');
     else
         [psi, phi] = realDeal(data_proj, zero_inital_u);
     end
 
-    data_proj = false;
-    zero_inital_u = true;
-
 
     %Parameters -----
-    lambda_list = linspace(0, 9, size); %lambda space
-    s = linspace(0.000, 9, size); %s space   note: at s = 0 regularization is needed - more on this later
+    lambda_list = linspace(t0, Tf, size); %lambda space
+    s = linspace(x0, Xf, size); %s space   note: at s = 0 regularization is needed - more on this later
 
     %deminsional variables
     g = 9.81; %gravity
@@ -32,8 +32,8 @@ function [ana_eta, ana_u] = CG_transform(load, size, data_proj, zero_inital_u)
         lambda = lambda_list(i); %for a single lambda
 
         %CG transform from (s, lambda) to (x,t)
-        u(i,:) = psi(s,lambda);
-        h(i,:) = phi(s,lambda)-u(i,:).^2/2;
+        u(i,:) = phi(s,lambda);
+        h(i,:) = psi(s,lambda)-u(i,:).^2/2;
         x(i,:) = s - h(i,:);
         t(i,:) = u(i,:) + lambda;
 
@@ -54,11 +54,11 @@ function [ana_eta, ana_u] = CG_transform(load, size, data_proj, zero_inital_u)
 
     ana_u = scatteredInterpolant(xx,tt,uu);
 
-    figure(1);
-    scatter(xx,tt);
-    xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
-    ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
-    title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 20);
+    %figure(1);
+    %scatter(xx,tt);
+    %xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
+    %ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
+    %title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 20);
     %export_fig('CG_coordinate_transform', '-m2', '-a4', '-painters');
 
     % figure(2);
