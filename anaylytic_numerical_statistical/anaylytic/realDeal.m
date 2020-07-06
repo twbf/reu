@@ -11,7 +11,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     K  = 10.0;		% upper bound in k domain [0, K]
     L  = 20.0;		% upper bound in x domain [0, L]
     Ls = 10.0;		% upper bound for s parameter
-    La = 10.0;		% upper bound for lambda parameter
+    La = 1.0;		% upper bound for lambda parameter
 
     %%% SWE Parameters
 
@@ -51,19 +51,20 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         A = @(x) [0 1; beta^2*s(x) 0];
         B = [0 0; 1 0];
 
-        D = @(x) eta_prime(x)*eye(2) + u_prime(x)*A(x);
+        D = @(x) (1+eta_prime(x))*eye(2) + u_prime(x)*A(x);
 
         phi0 = @(x) [u_0(x) ; eta_0(x)+(u_0(x).^2)/2];
-        phi0_prime = @(x) [u_prime(x); eta_prime(x)+2*u_0(x)*u_prime(x)];
+        phi0_prime = @(x) [u_prime(x); eta_prime(x)+u_0(x)*u_prime(x)];
 
-        proj = @(x) phi0(x) + u_0(x)*(u_prime(x)*inv(D(x))*B*phi0(x) - B*phi0(x) -A(x)*inv(D(x))*phi0_prime(x));
+        proj = @(x) phi0(x) + u_0(x)*(u_prime(x)*A(x)*inv(D(x))*B*phi0(x) - B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
 
         disp('a...')
         a  = chebfun(@(k) 2*k*sum( psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
+        plot(a);
 
         disp('b...')
         b  = chebfun(@(k) -2*beta*k*sum( phi_0(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
-
+        %plot(b);
     elseif zero_inital_u
 
         x = chebfun('x', [0 K]);
@@ -114,8 +115,8 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     disp('psi...')
     psi   = chebfun2(@(s,la) sum( ( a(k)*Cos(la*k) + b(k)*Sin(la*k) ) * j0(2.0*k*sqrt(s)) ), [0 Ls 0 La], 'vectorize');
 
-    %   figure(4);
-    %   plot(psi);
+       figure(4);
+       plot(psi);
     %   xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
     %   ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
     %   view([0 90]); colorbar;
@@ -124,10 +125,10 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     %   export_fig('psi.png', '-m2', '-a4', '-painters');
 
     disp('phi...')
-    phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) + b(k)*Cos(la*k) ) * j1(2.0*k*sqrt(s)) ), [0.00001 Ls 0.00 La], 'vectorize');
+    phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) - b(k)*Cos(la*k) ) * j1(2.0*k*sqrt(s)) ), [0.00001 Ls 0.00 La], 'vectorize');
 
-    %   figure(5);
-    %   plot(phi);
+       figure(5);
+       plot(phi);
     %   xlabel('$s$', 'interpreter', 'LaTeX', 'fontsize', 12);
     %   ylabel('$\lambda$', 'interpreter', 'LaTeX', 'fontsize', 12);
     %   view([0 90]); colorbar;

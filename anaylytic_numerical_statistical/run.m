@@ -16,7 +16,7 @@ global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
 
 %%% bathymetry and time
 
-td = 1.0/10.0; %slope of bathymetry
+td = 10.0/10.0; %slope of bathymetry
 
 t0 = 0; %initial time
 Tf = 10; %final time (10 in Catalina 1 experiement)
