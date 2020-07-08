@@ -34,7 +34,7 @@ x1 = 4.1209;
 x2 = 1.6384;
 
 eta_0 = @(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2);
-eta_prime = chebfun(@(x) -2*H1*c1*(x-x1)*exp(-c1*(x - x1).^2) + -2*H2*c2*(x-x2)*exp(-c2*(x - x2).^2), [x0 Xf]);
+eta_prime = chebfun(@(x) -2*H1*c1*(x-x1)*exp(-c1*(x - x1).^2) + 2*H2*c2*(x-x2)*exp(-c2*(x - x2).^2), [x0 Xf]);
 
 %u   = chebfun(@(x) -eta(x)/sqrt(x), [0 L]);
 %u_prime = chebfun(@(x) -( ( eta(x)/(2*sqrt(x)) + sqrt(x)*eta_prime(x) )/x ), [0 L]);  %needs to change

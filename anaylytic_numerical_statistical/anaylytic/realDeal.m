@@ -8,10 +8,10 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime t0 Tf x0 Xf
 
     %%% Physical parameter:
-    K  = 10.0;		% upper bound in k domain [0, K]
+    K  = 1.0;		% upper bound in k domain [0, K]
     L  = 20.0;		% upper bound in x domain [0, L]
-    Ls = 10.0;		% upper bound for s parameter
-    La = 1.0;		% upper bound for lambda parameter
+    Ls = Xf;		% upper bound for s parameter
+    La = Tf;		% upper bound for lambda parameter
 
     %%% SWE Parameters
 
@@ -45,7 +45,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         disp('data projection to lambda = 0');
 
         disp('p...')
-        p = chebfun('x', [0 K]);
+        x = chebfun('x', [0 Ls]);
 
         s = @(x) x + eta_0(x);
         A = @(x) [0 1; beta^2*s(x) 0];
@@ -56,21 +56,54 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         phi0 = @(x) [u_0(x) ; eta_0(x)+(u_0(x).^2)/2];
         phi0_prime = @(x) [u_prime(x); eta_prime(x)+u_0(x)*u_prime(x)];
 
-        proj = @(x) phi0(x) + u_0(x)*(u_prime(x)*A(x)*inv(D(x))*B*phi0(x) - B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
+        %proj = @(x) phi0(x) + u_0(x)*(u_prime(x)*A(x)*inv(D(x))*B*phi0(x) - B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
+        proj = @(x) phi0(x) + u_0(x).*(u_prime(x).*A(x)*inv(D(x))*B*phi0(x) - B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
 
-        disp('a...')
-        a  = chebfun(@(k) 2*k*sum( psi_0(p)*j0(2*k*sqrt(p)) ), [0 K]);
-        plot(a);
+        detD = @(x) (1+eta_0(x)).^2 - beta^2*s(x)*u_prime(x).^2;
+
+        in1_phi = @(x) u_prime(x)*(1+eta_prime(x)*u_0(x));
+        in2_phi = @(x) 0;
+        in3_phi = @(x) -beta^2*s(x)*u_prime(x).^2 + (1+eta_prime(x))*(eta_prime(x)+u_0(x)*u_prime(x));
+        proj_phi = chebfun(@(x) u_0(x) + u_0(x)*((in1_phi(x) - in3_phi(x))/detD(x) - in2_phi(x) ), [0 Ls]);
+
+        in1_psi = @(x) u_prime(x)*(-beta^.2*s(x)*u_0(x)^.2);
+        in2_psi = @(x) u_0(x);
+        in3_psi = @(x) beta^2*s(x)*(1+eta_prime(x))*u_prime(x) - u_prime(x)*beta^2*s(x)*(eta_prime(x)+u_0(x)*u_prime(x));
+        proj_psi = chebfun(@(x) eta_0(x) + (u_0(x).^2)/2 + u_0(x)*((in1_psi(x) - in3_psi(x))/detD(x) - in2_psi(x) ), [0 Ls]);
+
+        %tests that show that the non-matrix transform produces the same
+        %results as the matrix one
+%         figure(1);
+%         plot(proj_psi);
+% 
+%         figure(2);
+%         plot(proj_phi);
+% 
+%         figure(3);
+%         test1 = chebfun(@(k) psi_0(k), [0 Ls]);
+%         plot(test1);
+% 
+%         figure(4);
+%         test2 = chebfun(@(k) phi_0(k), [0 Ls]);
+%         plot(test2);
+
 
         disp('b...')
-        b  = chebfun(@(k) -2*beta*k*sum( phi_0(p)*p^(1/2)*j1(2*k*sqrt(p)) ), [0 K]);
-        %plot(b);
+
+        b  = chebfun(@(k) -2*beta*k*sum( proj_phi(x)*(x+eta_0(x))^(1/2).*j1(2.0*k*sqrt(x + eta_0(x))).*(1 + eta_prime(x))), [0 K]);
+
+        disp('a...');
+
+        a = chebfun(@(k) 2*k*sum(proj_psi(x).*j0(2.0*k*sqrt(x + eta_0(x))).*(1 + eta_prime(x))), [0 K]);
+
     elseif zero_inital_u
 
         x = chebfun('x', [0 K]);
 
         disp('zero initial velocity so setting a....')
         a = chebfun(@(k) 2*k*sum(eta_0(x).*j0(2.0*k*sqrt(x + eta_0(x))).*(1 + eta_prime(x))), [0 K]);
+        figure(2);
+        plot(a);
         disp('b = 0....')
         b = chebfun(@(k) 0, [0 K]);
 
@@ -137,7 +170,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     %   export_fig('phi.png', '-m2', '-a4', '-painters');
 
     disp('saving ...')
-    save('psi_phi_projection_cat1_0u')
+    save('psi_phi_projection_test')
     disp('done')
 
     function phi = phi_0(x)
@@ -145,10 +178,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         % input array x is a list of values for the projection
         % note: memory should be reaalocated
 
-        for i=1:size(x,2)
-            tmp = proj(x(i));
-            phi(i) = tmp(1);
-        end
+        phi = [1 0]*proj(x);
 
     end
 
@@ -157,10 +187,12 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         % input array x is a list of values for the projection
         % note: memory should be reaalocated
 
-        for i=1:size(x,2)
-            tmp = proj(x(i));
-            psi(i) = tmp(2);
-        end
+        %for i=1:size(x,2)
+            %tmp = proj(x(i));
+           % psi(i) = tmp(2);
+        %end
+
+        psi = [0 1]*proj(x);
 
     end
 

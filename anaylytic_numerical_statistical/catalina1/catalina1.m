@@ -7,7 +7,7 @@ function [eta_sl, u_sl] = catalina1(save)
     %integration Parameters
     Lx = 10; %upper bound on xi
     Lo = 10; %upper bound on omega
-    Ll = 1; %upper bound on lambda
+    Ll = 3; %upper bound on lambda
     Ls = 10; %upper bound on sigma
 
     %linear transform of x1, x2
@@ -75,6 +75,6 @@ function [eta_sl, u_sl] = catalina1(save)
     figure(5)
     plot(eta_sl)
 
-    save('catalinaadhd');
+    %save('catalinaadhd');
 
 end

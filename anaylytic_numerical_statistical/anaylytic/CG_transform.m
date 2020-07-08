@@ -1,14 +1,14 @@
 % Goal: For a given phi(s, lambda) and psi(s, lambda) compute eta, u, x, t
 
-function [ana_eta, ana_u] = CG_transform(load, size, data_proj, zero_inital_u)
+function [ana_eta, ana_u] = CG_transform(loadd, size, data_proj, zero_inital_u)
 
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
 
     disp(" ")
     disp("Nicolcsky Anaylytic:");
 
-    if load
-        load('psi_phi_projection.mat');
+    if loadd
+        load psi_phi_projection_test.mat phi psi
     else
         [psi, phi] = realDeal(data_proj, zero_inital_u);
     end
@@ -54,8 +54,8 @@ function [ana_eta, ana_u] = CG_transform(load, size, data_proj, zero_inital_u)
 
     ana_u = scatteredInterpolant(xx,tt,uu);
 
-    %figure(1);
-    %scatter(xx,tt);
+    figure(1);
+    scatter(xx,tt);
     %xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
     %ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
     %title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 20);
