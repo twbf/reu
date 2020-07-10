@@ -8,7 +8,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime t0 Tf x0 Xf
 
     %%% Physical parameter:
-    K  = 1.0;		% upper bound in k domain [0, K]
+    K  = 10.0;		% upper bound in k domain [0, K]
     L  = 20.0;		% upper bound in x domain [0, L]
     Ls = Xf;		% upper bound for s parameter
     La = Tf;		% upper bound for lambda parameter
@@ -170,7 +170,7 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     %   export_fig('phi.png', '-m2', '-a4', '-painters');
 
     disp('saving ...')
-    save('psi_phi_projection_test')
+    save('psi_phi_projection_test2')
     disp('done')
 
     function phi = phi_0(x)

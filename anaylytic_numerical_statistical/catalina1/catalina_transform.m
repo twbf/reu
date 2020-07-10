@@ -1,4 +1,4 @@
-function [eta, u] = catalina_transform(save, size)
+function [eta, u] = catalina_transform()
 
     global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
 
@@ -6,7 +6,7 @@ function [eta, u] = catalina_transform(save, size)
     disp("Catalina1 Anaylytic:");
 
     %this returns eta and u which are functions of sigma and lambda
-    [eta_sl, u_sl] = catalina1(save);
+    [eta_sl, u_sl] = catalina1(true);
 
     %Parameters -----
     lambda_list = linspace(t0, Tf, size); %lambda space

@@ -78,7 +78,7 @@ function [eta, u] = run_num()
 
     w0(1:N) = w0(1:N) + eta_0(xc);
 
-    w0(N+1:2*N,1) = u_0(xc); %-1 is because XC isnt long enough FIXME
+    w0(N+1:2*N,1) = w0(1:N).*u_0(xc); %-1 is because XC isnt long enough FIXME
 
     %%% Plot the initial condition to check:
     amp = 1.5*H2;

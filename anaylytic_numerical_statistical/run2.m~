@@ -21,7 +21,7 @@ t0 = 0; %initial time
 Tf = 3; %final time (10 in Catalina 1 experiement)
 
 x0 = 0;
-Xf = 7;
+Xf = 10;
 
 %%%initial conditions
 
@@ -32,26 +32,23 @@ c2 = 4.0;
 x1 = 4.1209;
 x2 = 1.6384;
 
-%ranges are high just so there are no problems
-eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2.5, 30]);
-eta_prime = diff(eta_0);
+eta_0 = @(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2);
+eta_prime = chebfun(@(x) -2*H1*c1*(x-x1)*exp(-c1*(x - x1).^2) + 2*H2*c2*(x-x2)*exp(-c2*(x - x2).^2), [x0 Xf]);
 
-u_0   = chebfun(@(x) -2.*(sqrt(x+eta_0(x)+3)-sqrt(x+3)), [-2.5 30]);
-u_prime = diff(u_0);
-
+u_0   = @(x) -2.*exp(-(x-4).^2).*(sqrt(x+eta_0(x))-sqrt(x))x ;
 %u_prime = chebfun(@(x) -( ( eta(x)/(2*sqrt(x)) + sqrt(x)*eta_prime(x) )/x ), [0 L]);  %needs to change
 
 %u_0 = @(x) 0.1*exp(-(x-3).^2);
-%u_prime = chebfun(@(x) -0.01*2*(x-3)*exp(-(x-3).^2), [x0 Xf]);
+u_prime = chebfun(@(x) -0.01*2*(x-3)*exp(-(x-3).^2), [x0 Xf]);
 
 %Nicolsky 2018 solution
-[ana_eta, ana_u] = CG_transform(false, 100, true, false);
+%[ana_eta, ana_u] = CG_transform(true, 100, true, false);
 
  t0 = 0; %initial time
  Tf = 0.9; %final time (10 in Catalina 1 experiement)
  
  x0 = 1;
- Xf = 6;
+ Xf = 9;
 %numeric solution
 [num_eta, num_u] = run_num();
 
