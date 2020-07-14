@@ -1,43 +1,33 @@
 
 %compute Nicolcsky 2018 anaylytic solution
 
-function [psi, phi] = realDeal(data_proj, zero_inital_u)
+function [psi, phi] = realDeal(data_proj, zero_inital_u, save_name)
 
-    %addpath('export_fig/');
-
-    global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime t0 Tf x0 Xf
-
-    %%% Physical parameter:
-    K  = 10.0;		% upper bound in k domain [0, K]
-    L  = 20.0;		% upper bound in x domain [0, L]
-    Ls = Xf;		% upper bound for s parameter
-    La = Tf;		% upper bound for lambda parameter
-
-    %%% SWE Parameters
+    global eta_0 eta_prime u_0 u_prime t0 Tf x0 Xf upS lowS upL lowL K
 
     m = Inf;
     beta = 1;
 
-    xx   = chebfun('x', [0 L]);
+    xx   = chebfun('x', [x0 25]);
 
     disp('j0...')
-    j0 = chebfun(@(kx) besselj(0.0, kx), [0.0 max([2.0*K*max(sqrt(xx + eta_0(xx))) 2.0*K*sqrt(Ls)])]);
+    j0 = chebfun(@(kx) besselj(0.0, kx), [0.0 max([2.0*K*max(sqrt(xx + eta_0(xx))) 2.0*K*sqrt(upS)])]);
 
     disp('j1...')
-    j1 = chebfun(@(kx) besselj(1.0, kx), [0.0 max([2.0*K*max(sqrt(xx + eta_0(xx))) 2.0*K*sqrt(Ls)])]);
+    j1 = chebfun(@(kx) besselj(1.0, kx), [0.0 max([2.0*K*max(sqrt(xx + eta_0(xx))) 2.0*K*sqrt(upS)])]);
 
     disp('cos...')
-    Cos = chebfun(@(lk) cos(lk), [0 La*K], 'vectorize');
+    Cos = chebfun(@(lk) cos(lk), [0 upL*K], 'vectorize');
 
     disp('sin...')
-    Sin = chebfun(@(lk) sin(lk), [0 La*K], 'vectorize');
+    Sin = chebfun(@(lk) sin(lk), [0 upL*K], 'vectorize');
 
     if data_proj
 
         disp('data projection to lambda = 0');
 
         disp('p...')
-        x = chebfun('x', [0 Ls]);
+        x = chebfun('x', [0 upS]);
 
         s = @(x) x + eta_0(x);
         A = @(x) [0 1; beta^2*s(x) 0];
@@ -55,12 +45,12 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
         in1_phi = @(x) u_prime(x)*(1+eta_prime(x)*u_0(x));
         in2_phi = @(x) 0;
         in3_phi = @(x) -beta^2*s(x)*u_prime(x).^2 + (1+eta_prime(x))*(eta_prime(x)+u_0(x)*u_prime(x));
-        proj_phi = chebfun(@(x) u_0(x) + u_0(x)*((in1_phi(x) - in3_phi(x))/detD(x) - in2_phi(x) ), [0 Ls]);
+        proj_phi = chebfun(@(x) u_0(x) + u_0(x)*((in1_phi(x) - in3_phi(x))/detD(x) - in2_phi(x) ), [0 upS]);
 
         in1_psi = @(x) u_prime(x)*(-beta^.2*s(x)*u_0(x)^.2);
         in2_psi = @(x) u_0(x);
         in3_psi = @(x) beta^2*s(x)*(1+eta_prime(x))*u_prime(x) - u_prime(x)*beta^2*s(x)*(eta_prime(x)+u_0(x)*u_prime(x));
-        proj_psi = chebfun(@(x) eta_0(x) + (u_0(x).^2)/2 + u_0(x)*((in1_psi(x) - in3_psi(x))/detD(x) - in2_psi(x) ), [0 Ls]);
+        proj_psi = chebfun(@(x) eta_0(x) + (u_0(x).^2)/2 + u_0(x)*((in1_psi(x) - in3_psi(x))/detD(x) - in2_psi(x) ), [0 upS]);
 
         %tests that show that the non-matrix transform produces the same
         %results as the matrix one
@@ -89,12 +79,11 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
 
     elseif zero_inital_u
 
-        x = chebfun('x', [0 K]);
+        x = chebfun('x', [0 Xf]);
 
         disp('zero initial velocity so setting a....')
         a = chebfun(@(k) 2*k*sum(eta_0(x).*j0(2.0*k*sqrt(x + eta_0(x))).*(1 + eta_prime(x))), [0 K]);
-        figure(2);
-        plot(a);
+
         disp('b = 0....')
         b = chebfun(@(k) 0, [0 K]);
 
@@ -116,16 +105,16 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u)
     end
 
     %phi and psi integration variable
-    k   = chebfun('x', [0 K]);
+    k = chebfun('x', [0 K]);
 
     disp('psi...')
-    psi   = chebfun2(@(s,la) sum( ( a(k)*Cos(la*k) + b(k)*Sin(la*k) ) * j0(2.0*k*sqrt(s)) ), [0 Ls 0 La], 'vectorize');
+    psi = chebfun2(@(s,la) sum( ( a(k)*Cos(la*k) + b(k)*Sin(la*k) ) * j0(2.0*k*sqrt(s)) ), [0 upS 0 upL], 'vectorize');
 
     disp('phi...')
-    phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) - b(k)*Cos(la*k) ) * j1(2.0*k*sqrt(s)) ), [0.00001 Ls 0.00 La], 'vectorize');
+    phi = chebfun2(@(s,la) s^(-1/2)*sum( ( a(k)*Sin(la*k) - b(k)*Cos(la*k) ) * j1(2.0*k*sqrt(s)) ), [0.00001 upS 0.00 upL], 'vectorize');
 
     disp('saving ...')
-    save('psi_phi_projection_test2')
+    save(save_name)
     disp('done')
 
     %phi_0 via matrix algerbra

@@ -1,22 +1,21 @@
 % Goal: For a given phi(s, lambda) and psi(s, lambda) compute eta, u, x, t
 
-function [ana_eta, ana_u] = CG_transform(loadd, size, data_proj, zero_inital_u)
+function [ana_eta, ana_u] = CG_transform(loadd,save_name, size, data_proj, zero_inital_u)
 
-    global H1 H2 c1 c2 x1 x2 eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
+    global eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf upS lowS upL lowL K
 
     disp(" ")
     disp("Nicolcsky Anaylytic:");
 
     if loadd
-        load psi_phi_projection_test2.mat phi psi
+        load(save_name, 'phi', 'psi');
     else
-        [psi, phi] = realDeal(data_proj, zero_inital_u);
+        [psi, phi] = realDeal(data_proj, zero_inital_u, save_name);
     end
 
-
     %Parameters -----
-    lambda_list = linspace(t0, Tf, size); %lambda space
-    s = linspace(x0, Xf, size); %s space   note: at s = 0 regularization is needed - more on this later
+    lambda_list = linspace(lowL, upL, size); %lambda space
+    s = linspace(lowS, upS, size); %s space   note: at s = 0 regularization is needed - more on this later
 
     %deminsional variables
     g = 9.81; %gravity
@@ -56,6 +55,9 @@ function [ana_eta, ana_u] = CG_transform(loadd, size, data_proj, zero_inital_u)
 
     figure(1);
     scatter(xx,tt);
+
+    figure(2);
+    mesh(x,t,h);
     %xlabel('$x$', 'interpreter', 'LaTeX', 'fontsize', 15);
     %ylabel('$t$', 'interpreter', 'LaTeX', 'fontsize', 15);
     %title('Equally Spaced Grid in $(s, \lambda)$ Transformed to $(x, t)$ ', 'interpreter', 'LaTeX', 'fontsize', 20);

@@ -1,5 +1,5 @@
 
-function [diff, l2] = stat(f, g, size)
+function [diff, l2, g_diff] = stat(f, g, size, nuclear_option)
 
     global t0 Tf x0 Xf
 
@@ -11,10 +11,21 @@ function [diff, l2] = stat(f, g, size)
 
     difference = zeros(size,size);
     l2 = zeros(size);
+    g_adj = zeros(size,size);
 
     for t=1:num_t
         for x=1:num_x
+          if nuclear_option
+            if f(x_list(x),t_list(t))  == 0
+              difference(x,t) = 0;
+              g_adj(x,t) = 0;
+            else
+              g_adj(x,t) = g(x_list(x),t_list(t));
+              difference(x,t) = f(x_list(x),t_list(t)) - g(x_list(x),t_list(t));
+            end
+          else
             difference(x,t) = f(x_list(x),t_list(t)) - g(x_list(x),t_list(t));
+          end
         end
         l2(t) = norm(difference(:,t),2);
     end
@@ -30,7 +41,9 @@ function [diff, l2] = stat(f, g, size)
     xx = reshape(xx, [size * size,1]);
     tt = reshape(tt, [size * size,1]);
     difference = reshape(difference, [size * size,1]);
+    g_adj = reshape(g_adj, [size * size,1]);
 
     diff = scatteredInterpolant(xx,tt,difference);
+    g_diff = scatteredInterpolant(xx,tt,g_adj);
 
 end

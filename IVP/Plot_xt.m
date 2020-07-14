@@ -22,9 +22,9 @@ function Plot_xt(f, size, figure_num, graph_title, x_axis, y_axis, z_axis)
 
     figure(figure_num)
     mesh(tt,xx,hh)
-    title([graph_title]);
-    xlabel(x_axis);
-    ylabel(y_axis);
-    zlabel(z_axis);
-    
+    title([graph_title],'Interpreter','latex');
+    xlabel(x_axis,'Interpreter','latex');
+    ylabel(y_axis,'Interpreter','latex');
+    zlabel(z_axis,'Interpreter','latex');
+
 end

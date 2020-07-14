@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  5 JUL 2020 21:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  13 JUL 2020 19:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -82,13 +82,35 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
 )
-(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks20
 )
+(/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/local/texlive/2020/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count187
+\Gm@cntv=\count188
+\c@Gm@tempcnt=\count189
+\Gm@bindingoffset=\dimen144
+\Gm@wd@mp=\dimen145
+\Gm@odd@mp=\dimen146
+\Gm@even@mp=\dimen147
+\Gm@layoutwidth=\dimen148
+\Gm@layoutheight=\dimen149
+\Gm@layouthoffset=\dimen150
+\Gm@layoutvoffset=\dimen151
+\Gm@dimlist=\toks21
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
+
 (/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
 
@@ -103,45 +125,103 @@ Package graphics Info: Driver file: pdftex.def on input line 105.
 (/usr/local/texlive/2020/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen144
-\Gin@req@width=\dimen145
+\Gin@req@height=\dimen152
+\Gin@req@width=\dimen153
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/01/22 v1.3d Sub-captions (AR)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
+\captionmargin=\dimen154
+\captionmargin@=\dimen155
+\captionwidth=\dimen156
+\caption@tempdima=\dimen157
+\caption@indent=\dimen158
+\caption@parindent=\dimen159
+\caption@hangindent=\dimen160
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count190
+\c@continuedfloat=\count191
+)
+\c@subfigure=\count192
+\c@subtable=\count193
 )
 (/usr/local/texlive/2020/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count187
+\l__kernel_color_stack_int=\count194
 \l__pdf_internal_box=\box47
 )
 (./anaylytic_numeric_catalina_1.aux)
 \openout1 = `anaylytic_numeric_catalina_1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 6.
-LaTeX Font Info:    ... okay on input line 6.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
+LaTeX Font Info:    ... okay on input line 7.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
+* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=430.00462pt
+* \textheight=556.47656pt
+* \oddsidemargin=19.8752pt
+* \evensidemargin=19.8752pt
+* \topmargin=-13.87262pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 (/usr/local/texlive/2020/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count188
-\scratchdimen=\dimen146
+\scratchcounter=\count195
+\scratchdimen=\dimen161
 \scratchbox=\box48
-\nofMPsegments=\count189
-\nofMParguments=\count190
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count191
-\MPscratchDim=\dimen147
-\MPnumerator=\count192
-\makeMPintoPDFobject=\count193
-\everyMPtoPDFconversion=\toks22
+\nofMPsegments=\count196
+\nofMParguments=\count197
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count198
+\MPscratchDim=\dimen162
+\MPnumerator=\count199
+\makeMPintoPDFobject=\count266
+\everyMPtoPDFconversion=\toks23
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -151,91 +231,190 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+
 
 LaTeX Warning: No \author given.
-
-<num.png, id=1, 1124.2pt x 843.15pt>
-File: num.png Graphic file (type png)
-<use num.png>
-Package pdftex.def Info: num.png  used on input line 47.
-(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
-
-Overfull \hbox (15.0pt too wide) in paragraph at lines 47--48
-[][] 
- []
 
 [1
 
 {/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<images/scatter.png, id=17, 2890.8pt x 1483.5425pt>
-File: images/scatter.png Graphic file (type png)
-<use images/scatter.png>
-Package pdftex.def Info: images/scatter.png  used on input line 56.
-(pdftex.def)             Requested size: 345.0pt x 177.04402pt.
+<images/eta_FVM_0u.png, id=16, 1124.2pt x 843.15pt>
+File: images/eta_FVM_0u.png Graphic file (type png)
+<use images/eta_FVM_0u.png>
+Package pdftex.def Info: images/eta_FVM_0u.png  used on input line 55.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 56--57
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 55--56
 [][] 
  []
 
-[2 <./num.png (PNG copy)>]
-<ana.png, id=21, 1124.2pt x 843.15pt>
-File: ana.png Graphic file (type png)
-<use ana.png>
-Package pdftex.def Info: ana.png  used on input line 94.
-(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+<images/eta_FVM_non0u.png, id=17, 1124.2pt x 843.15pt>
+File: images/eta_FVM_non0u.png Graphic file (type png)
+<use images/eta_FVM_non0u.png>
+Package pdftex.def Info: images/eta_FVM_non0u.png  used on input line 60.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 94--95
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 60--61
 [][] 
+ []
+
+
+Overfull \hbox (4.44441pt too wide) in paragraph at lines 54--63
+ [][]  [] 
+ []
+
+[2 <./images/eta_FVM_0u.png (PNG copy)> <./images/eta_FVM_non0u.png (PNG copy)>
+]
+<images/scatter.png, id=23, 2890.8pt x 1483.5425pt>
+File: images/scatter.png Graphic file (type png)
+<use images/scatter.png>
+Package pdftex.def Info: images/scatter.png  used on input line 117.
+(pdftex.def)             Requested size: 375.8172pt x 192.8673pt.
+<images/eta_Nicolsky_0u.png, id=24, 1124.2pt x 843.15pt>
+File: images/eta_Nicolsky_0u.png Graphic file (type png)
+<use images/eta_Nicolsky_0u.png>
+Package pdftex.def Info: images/eta_Nicolsky_0u.png  used on input line 125.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 125--126
+ [][] 
+ []
+
+<images/eta_Nicolsky_non0u.png, id=25, 1124.2pt x 843.15pt>
+File: images/eta_Nicolsky_non0u.png Graphic file (type png)
+<use images/eta_Nicolsky_non0u.png>
+Package pdftex.def Info: images/eta_Nicolsky_non0u.png  used on input line 131.
+
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 131--132
+ [][] 
+ []
+
+
+Overfull \hbox (4.44441pt too wide) in paragraph at lines 123--134
+ [][]  [] 
  []
 
 [3 <./images/scatter.png (PNG copy)>]
-<diff.png, id=26, 1124.2pt x 843.15pt>
-File: diff.png Graphic file (type png)
-<use diff.png>
-Package pdftex.def Info: diff.png  used on input line 100.
-(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+<images/eta_NOAA_0u.png, id=29, 1124.2pt x 843.15pt>
+File: images/eta_NOAA_0u.png Graphic file (type png)
+<use images/eta_NOAA_0u.png>
+Package pdftex.def Info: images/eta_NOAA_0u.png  used on input line 168.
+(pdftex.def)             Requested size: 337.2626pt x 252.94695pt.
+<images/diff_FVM_Nicolsky_0u.png, id=30, 1124.2pt x 843.15pt>
+File: images/diff_FVM_Nicolsky_0u.png Graphic file (type png)
+<use images/diff_FVM_Nicolsky_0u.png>
+Package pdftex.def Info: images/diff_FVM_Nicolsky_0u.png  used on input line 18
+3.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 100--101
-[][] 
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 183--184
+ [][] 
  []
 
-[4 <./ana.png (PNG copy)>]
-<l2.png, id=30, 1124.2pt x 843.15pt>
-File: l2.png Graphic file (type png)
-<use l2.png>
-Package pdftex.def Info: l2.png  used on input line 105.
-(pdftex.def)             Requested size: 345.0pt x 258.74925pt.
+<images/l2_FVM_Nicolsky_0u.png, id=31, 1124.2pt x 843.15pt>
+File: images/l2_FVM_Nicolsky_0u.png Graphic file (type png)
+<use images/l2_FVM_Nicolsky_0u.png>
+Package pdftex.def Info: images/l2_FVM_Nicolsky_0u.png  used on input line 189.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 105--106
-[][] 
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 189--190
+ [][] 
  []
 
-[5 <./diff.png (PNG copy)>] [6 <./l2.png (PNG copy)>]
-(./anaylytic_numeric_catalina_1.aux) ) 
+
+Overfull \hbox (4.44441pt too wide) in paragraph at lines 181--192
+ [][]  [] 
+ []
+
+<images/diff_FVM_NOAA_0u.png, id=32, 1124.2pt x 843.15pt>
+File: images/diff_FVM_NOAA_0u.png Graphic file (type png)
+<use images/diff_FVM_NOAA_0u.png>
+Package pdftex.def Info: images/diff_FVM_NOAA_0u.png  used on input line 202.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 202--203
+ [][] 
+ []
+
+<images/l2_FVM_NOAA_0u.png, id=33, 1124.2pt x 843.15pt>
+File: images/l2_FVM_NOAA_0u.png Graphic file (type png)
+<use images/l2_FVM_NOAA_0u.png>
+Package pdftex.def Info: images/l2_FVM_NOAA_0u.png  used on input line 208.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 208--209
+ [][] 
+ []
+
+
+Overfull \hbox (4.44441pt too wide) in paragraph at lines 200--211
+ [][]  [] 
+ []
+
+[4 <./images/eta_Nicolsky_0u.png (PNG copy)> <./images/eta_Nicolsky_non0u.png (
+PNG copy)>]
+<images/diff_FVM_Nicolsky_non0u.png, id=37, 1124.2pt x 843.15pt>
+File: images/diff_FVM_Nicolsky_non0u.png Graphic file (type png)
+<use images/diff_FVM_Nicolsky_non0u.png>
+Package pdftex.def Info: images/diff_FVM_Nicolsky_non0u.png  used on input line
+ 224.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 224--225
+ [][] 
+ []
+
+<images/l2_FVM_Nicolsky_non0u.png, id=38, 1124.2pt x 843.15pt>
+File: images/l2_FVM_Nicolsky_non0u.png Graphic file (type png)
+<use images/l2_FVM_Nicolsky_non0u.png>
+Package pdftex.def Info: images/l2_FVM_Nicolsky_non0u.png  used on input line 2
+30.
+(pdftex.def)             Requested size: 281.04932pt x 210.78697pt.
+
+Overfull \hbox (66.04701pt too wide) in paragraph at lines 230--231
+ [][] 
+ []
+
+
+Overfull \hbox (4.44441pt too wide) in paragraph at lines 222--233
+ [][]  [] 
+ []
+
+[5 <./images/eta_NOAA_0u.png (PNG copy)>] [6 <./images/diff_FVM_Nicolsky_0u.png
+ (PNG copy)> <./images/l2_FVM_Nicolsky_0u.png (PNG copy)> <./images/diff_FVM_NO
+AA_0u.png (PNG copy)> <./images/l2_FVM_NOAA_0u.png (PNG copy)>] [7 <./images/di
+ff_FVM_Nicolsky_non0u.png (PNG copy)> <./images/l2_FVM_Nicolsky_non0u.png (PNG 
+copy)>] (./anaylytic_numeric_catalina_1.aux) ) 
 Here is how much of TeX's memory you used:
- 1806 strings out of 480608
- 24723 string characters out of 5903631
- 265537 words of memory out of 5000000
- 17713 multiletter control sequences out of 15000+600000
- 537413 words of font info for 42 fonts, out of 8000000 for 9000
+ 3536 strings out of 480608
+ 54984 string characters out of 5903631
+ 302072 words of memory out of 5000000
+ 19414 multiletter control sequences out of 15000+600000
+ 537712 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 30i,13n,25p,284b,195s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2020/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr17.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmsy7.pfb>
-Output written on anaylytic_numeric_catalina_1.pdf (6 pages, 824346 bytes).
+ 48i,13n,46p,418b,449s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2020/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2020/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2020/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2020/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2020/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2020/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2020/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2020/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr9.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy7.pfb>
+Output written on anaylytic_numeric_catalina_1.pdf (7 pages, 1704170 bytes).
 PDF statistics:
- 72 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 88 PDF objects out of 1000 (max. 8388607)
+ 54 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
