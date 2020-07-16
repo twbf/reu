@@ -12,18 +12,21 @@ g2 = 0.5*g;
 d=1;
 
 %---------Removing Dimensions------%
-t_dim = linspace(0,10,200); 
+t_dim = linspace(0,10,200);
 t = t_dim/(sqrt(d/g)); %dimensionless time
 
 u1_dim = shelf.u1;                                  %pulls u1 from runwave.m
 u1 = u1_dim/(sqrt(g*d)); %dimensionless velocity
 
+eta1_dim = shelf.eta1; % pulls eta from runwave.m
+eta1 = eta1_dim/(d); %making height dimensionless
+
 lambda = t-u1; %lambda definition
 
 %----------Some Graphs------------%
- 
+
 figure(1) %plot u
-plot(t,u1) 
+plot(t,u1)
 grid on
 title('Bounrdary speed data, u1(t)')
 xlabel('t')
@@ -50,14 +53,13 @@ c1 = coeff(1)
 c2 = coeff(2)
 
 gamma = c1*lambda+c2;  % gamma vector
-
-
-eta1_dim = shelf.eta1; % pulls eta from runwave.m
-eta1 = eta1_dim/(d); %making height dimensionless
+gamma(1) = 0; %FIXME supposed to keep gama positive
+gamma(200) = 31.163625990159890; %FIXME supposed to keep gama positive in range
 
 %--------------Calculating Eta at Gamma-------%
 
 eta_of_gamma = interp1(t,eta1,gamma); % calculating eta at gamma
+disp(gamma);
 figure(4)
 plot(gamma,eta_of_gamma)
 title('Eta of Gamma')
@@ -97,11 +99,18 @@ sigmaprime = zeros(1,200);
 sigmaprime(1) = (sigma(2)-sigma(1))/(t(2)-t(1)); %initial point
 
 for i = 2:n-1    %calclating sigma prime via finite difference
-    
+
    sigmaprime(i) = (sigma(i+1)-sigma(i-1))/(t(i+1)-t(i-1));
-    
+
 end
 sigmaprime(n) = (sigma(n)-sigma(n-1))/(t(n)-t(n-1)); %final point
+
+figure(5)
+plot(lambda,sigmaprime)
+title('Eta of Gamma')
+xlabel('Gamma')
+ylabel('Eta')
+grid on
 
 minusone = repelem(-1,200); %vector full of -1
 
@@ -111,56 +120,14 @@ D_inverse = zeros(2,400); %preparing resultant D-inverse
 
 
 for i = 1:200 % inverting element-by-element
-    
+
 D_sub = [sigmaprime(i),minusone(i);-(sigma(i)),sigmaprime(i)];
-    
+
 D_sub_inv = inv(D_sub);
-    
+
 D_inverse(1,i) = D_sub_inv(1,1);
 D_inverse(1,200+i) = D_sub_inv(1,2); % because the resultant matrix is 2x400
 D_inverse(2,i) = D_sub_inv(2,1);
 D_inverse(2,200+i) = D_sub_inv(2,2);
-    
+
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
