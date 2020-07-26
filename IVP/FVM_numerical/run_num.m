@@ -59,7 +59,7 @@ function [eta, u] = run_num()
     b  = 10;	% the right boundary (wall)
 
     %%% Numerical parameters:
-    N  = 2000;							% number of grid points
+    N  = 8000;							% number of grid points
     x  = linspace(a, b, N+1)';			% cell interfaces (the apostrophe is to transpose)
     dx = x(2) - x(1);                  	% spatial grid step
     xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
@@ -67,7 +67,7 @@ function [eta, u] = run_num()
     %%% Bathymetry function:
     h  = td*xc;
 
-    mm=2000;
+    mm=8000;
 
     small_h = h(1:mm);
 
@@ -79,7 +79,7 @@ function [eta, u] = run_num()
     w0(1:N) = w0(1:N) + eta_0(xc);
 
     %setting speed
-    %u = 0 where x<0 
+    %u = 0 where x<0
     for i = 1:N
       if xc(i) > 0
         w0(i+N) = w0(i)*u_0(xc(i));
@@ -101,7 +101,7 @@ function [eta, u] = run_num()
     fprintf(' Done\n');
 
     %%% Post-processing of the solution:
-    M     = 200;	% number of time instances where we project solution
+    M     = 1000;	% number of time instances where we project solution
     tlist = linspace(t0, Tf, M);
     solpr = deval(sol, tlist);
 

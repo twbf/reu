@@ -38,17 +38,10 @@ u_0   = chebfun(@(x) 0, [-3 21]);
 u_prime = diff(u_0);
 
 %resolution of solution
-res = 1000;
-
-
-%%% catalina 1 solution
-%[cat_eta, cat_u] = catalina_transform(true, 1000);
-
-%%% numeric solution
-%[num_eta, num_u] = run_num();
+res = 2000;
 
 %catalina 1 solution
-[cat_eta, cat_u] = catalina_transform('catalina1_phi_psi2.mat', res);
+%[cat_eta, cat_u] = catalina_transform('catalina1_phi_psi2.mat', res);
 
 %%% Nicolsky 2018 solution
 % integration parameters
@@ -64,7 +57,7 @@ K = 30; % upper bound on integration parameter
 t0 = 0.0001; %initial time
 Tf = 1.9; %final time (10 in Catalina 1 experiement)
 
-x0 = -0.1;
+x0 = 0.5;
 Xf = 3;
 
 
@@ -74,24 +67,24 @@ Xf = 3;
 %comparison
 [d, l2, ana_eta] = stat(num_eta, ana_eta, res, true); %nuclear_option
 
-[d_cat, l2_cat, cat_eta] = stat(num_eta, cat_eta, res, true); %nuclear_option
+%[d_cat, l2_cat, cat_eta] = stat(num_eta, cat_eta, res, true); %nuclear_option
 
 %display
 Plot_xt(num_eta, res, 1, '$\eta$ FVM', 'x', 't', '$\eta$')
-Plot_xt(cat_eta, res, 2, '$\eta$ NOAA Catalina1', 'x', 't', '$\eta$')
+%Plot_xt(cat_eta, res, 2, '$\eta$ NOAA Catalina1', 'x', 't', '$\eta$')
 Plot_xt(ana_eta, res, 3, '$\eta$ Nicolsky', 'x', 't', 'u')
 
 Plot_xt(d, res, 4, '$\eta$ FVM - $\eta$ Nicolsky', 'x', 't', 'diff')
-Plot_xt(d_cat, res, 5, '$\eta$ FVM - $\eta$ NOAA Catalina1', 'x', 't', 'difference')
+%Plot_xt(d_cat, res, 5, '$\eta$ FVM - $\eta$ NOAA Catalina1', 'x', 't', 'difference')
 
 figure(6)
 plot(linspace(t0, Tf, res), l2);
 title(['$L2$ Norm Difference Between FVM and Nicolsky 2018'],'Interpreter','latex');
-xlabel('$t$','Interpreter','latex');
-ylabel('$L2$ Norm','Interpreter','latex');
+%xlabel('$t$','Interpreter','latex');
+%ylabel('$L2$ Norm','Interpreter','latex');
 
-figure(7)
-plot(linspace(t0, Tf, res), l2_cat);
-title(['$L2$ Norm Difference Between FVM and NOAA Catalina 1'],'Interpreter','latex');
-xlabel('$t$','Interpreter','latex');
-ylabel('$L2$ Norm','Interpreter','latex');
+%figure(7)
+%plot(linspace(t0, Tf, res), l2_cat);
+%title(['$L2$ Norm Difference Between FVM and NOAA Catalina 1'],'Interpreter','latex');
+%xlabel('$t$','Interpreter','latex');
+%ylabel('$L2$ Norm','Interpreter','latex');

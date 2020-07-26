@@ -36,6 +36,7 @@ format longE
 %%% Libraries we use:
 addpath('sources/');
 addpath('odetpbar/');
+addpath('export_fig/');
 
 %%% Global variables:
 global cf2 d xc FS IN LW
@@ -47,46 +48,38 @@ LS = 'LineStyle';
 LW = 'LineWidth';
 
 %%% Physical parameters:
-g  = 9.8;	% gravity acceleration
+g  = 1.0;	% gravity acceleration
 g2 = 0.5*g;	% g/2
-cf2 = 0.00;	% friction coefficient
+cf2 = 0.0;	% friction coefficient
 
-a  = -2.0;	% the left boundary (incident wave)
-b  = 10.0;	% the right boundary (wall)
+a  = -1.0;	% the left boundary (incident wave)
+b  = 0.45;	% the right boundary (wall)
+d  = 1.0;   % still water depth on the right boundary
 % Bottom slope:
-td = 1.0/10.0;
-
-%%% Initial condition parameters:
-H1 = 0.0006;
-H2 = 0.018;
-c1 = 0.4444;
-c2 = 4.0;
-x1 = 4.1209;
-x2 = 1.6384;
+td = 1.0/1.0;
 
 %%% Numerical parameters:
-N  = 20000;							% number of grid points
+N  = 1000;							% number of grid points
 x  = linspace(a, b, N+1)';			% cell interfaces
 dx = x(2) - x(1);                  	% spatial grid step
 xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
 %%% Bathymetry function:
-h  = td*xc;
+h  = -td*xc;
 
 %%% Choice of the initial condition:
 w0 = zeros(2*N,1);
 w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
-w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
 
 % time stepping:
 t0 = 0.0;
 Tf = 10.0; % final simulation time (the same as experiment)
 
 %%% Plot the initial condition to check:
-amp = 1.5*H2;
+amp = 0.1;
 figure;
 set(gcf, 'pos', [1 621 903 353]);
-% Plot(t0, w0);
+Plot(t0, w0);
 
 %%% We run the simulation:
 options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
@@ -95,29 +88,30 @@ sol = ode23(@RHS, [t0 Tf], w0, options);
 fprintf(' Done\n');
 
 %%% Post-processing of the solution:
-M     = 2000;	% number of time instances where we project solution
+M     = 500;	% number of time instances where we project solution
 tlist = linspace(t0, Tf, M);
 solpr = deval(sol, tlist);
 
 % %%% Make a little animation of the numerical solution:
 Rup = zeros(M,1);
 for t=1:M % loop in time
-    ind = find(solpr(1:N,t) > 1e-2, 1, 'first');
+    ind = find(solpr(1:N,t) > 1e-2, 1, 'last');
     Rup(t) = -h(ind);
-
 	Plot(tlist(t), solpr(:,t));
 end % for t
 Rup = Rup - Rup(1);
 
 %%% Extraction of run-up data:
-Rup = smooth(Rup, 7);
+Rup = smooth(Rup, 5);
 figure;
 plot(tlist, Rup, '-', LW, 2.0); grid off;
 axis tight;
 xlim([t0 Tf]); ylim([1.2*min(Rup) 1.1*max(Rup)]);
 xlabel('$t$, s', IN, 'LaTeX', FS, 14);
 ylabel('$R(t)$, m', IN, 'LaTeX', FS, 14);
-ll = legend(' Numerical data', 'location', 'SouthEast');
+ll = legend(' Numerical data', 'location', 'NorthWest');
 set(ll, 'box', 'off');
 title('Wave run-up');
 set(gcf, 'Color', 'w');
+
+% export_fig('shots/runup.png', '-m2', '-a4', '-painters', '-q100');

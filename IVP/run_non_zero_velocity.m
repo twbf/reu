@@ -36,8 +36,8 @@ x2 = 1.6384;
 eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2.5, 30]);
 eta_prime = diff(eta_0);
 
-u_0   = chebfun(@(x) -2.*(sqrt(x+eta_0(x)+3)-sqrt(x+3)), [0 30]);
-u_prime = diff(u_0);
+%u_0   = chebfun(@(x) -2.*(sqrt(x+eta_0(x)+3)-sqrt(x+3)), [0 30]);
+%u_prime = diff(u_0);
 
 %resolution of solution
 res = 1000;

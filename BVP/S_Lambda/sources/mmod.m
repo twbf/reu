@@ -8,13 +8,8 @@
 %%% Distributed under GNU General Public License       %%%
 %%% -------------------------------------------------- %%%
 
-function flux = PhysFlux (w)
+function z = mmod(x, y)
 
-    global g2
+	z = 0.5*(sign(x) + sign(y)).*min(abs(x), abs(y));
 
-    flux = 0.0*w;
-
-    flux(:,1) = w(:,2);
-    flux(:,2) = w(:,2).^2./(w(:,1)+eps) + g2*w(:,1).^2;
-
-end % PhysFlux ()
+end % mmod ()

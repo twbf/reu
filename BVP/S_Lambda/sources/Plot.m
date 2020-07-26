@@ -8,13 +8,18 @@
 %%% Distributed under GNU General Public License       %%%
 %%% -------------------------------------------------- %%%
 
-function flux = PhysFlux (w)
+function Plot (t, w)
 
-    global g2
+    global FS IN LW	
+	global a amp b td h xc N
 
-    flux = 0.0*w;
+	plot(xc, w(1:N) - h, '-', LW, 2.2), hold on, grid on
+    plot(xc, -h, '-', LW, 2.2), hold off
+    xlim([a b]);
+    xlabel('$x$', IN, 'latex', 'fontsize', 16);
+    ylabel('$\eta(x,t)$', IN, 'latex', FS, 16);
+    title(['Free surface elevation at $t = $ ',num2str(t,'%5.2f'), ' s'], IN, 'latex', FS, 14);
+    set(gcf, 'Color', 'w');
+    drawnow
 
-    flux(:,1) = w(:,2);
-    flux(:,2) = w(:,2).^2./(w(:,1)+eps) + g2*w(:,1).^2;
-
-end % PhysFlux ()
+end % Plot ()
