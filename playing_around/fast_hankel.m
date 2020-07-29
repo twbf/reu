@@ -5,11 +5,14 @@ format longE
 
 num_x = 1000;
 num_k = 1000;
+num_s = 1000;
 num_la = 100;
 
-x = linspace(0,30,num_x);
-k = linspace(0,70,num_k);
-la_list = linspace(0,3,num_la);
+x = linspace(0,100,num_x);
+k = linspace(0,60,num_k);
+la_list = linspace(0,6,num_la);
+s = linspace(0,10,num_s);
+
 eta_0 = @(x) 0.1*exp(-(x-5).^2);
 eta_prime = @(x) -2*0.1*(x-5).*exp(-(x-5).^2);
 
@@ -20,7 +23,7 @@ c2 = 4.0;
 x1 = 4.1209 +4;
 x2 = 1.6384 +4;
 
-%eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-3, 50]);
+%eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-3, 100]);
 %eta_prime = diff(eta_0);
 
 
@@ -30,8 +33,8 @@ x2 = 1.6384 +4;
 u_0 = @(x) 0;
 u_prime = @(x) 0;
 
-s = @(x) x + eta_0(x);
-A = @(x) [0 1; s(x) 0];
+ss = @(x) x + eta_0(x);
+A = @(x) [0 1; ss(x) 0];
 B = [0 0; 1 0];
 
 D = @(x) (1+eta_prime(x))*eye(2) + u_prime(x)*A(x);
@@ -45,22 +48,21 @@ g = zeros(size(x));
 f = zeros(size(x));
 
 for i=1:num_x
+  s_s = ss(x(i));
   p = proj(x(i));
   g(i) = [0 1]*p;
-  f(i) = [1 0]*p*x(i).^(1/2);
+  f(i) = [1 0]*p*s_s.^(1/2);
 end
 
-ss = @(x) cos(x);
-[test t1 t2 t3 t4] = fht(g, 10, 100, [1,2], 7, 5);
+%FHT playwork
+%ss = @(x) cos(x);
+%[test t1 t2 t3 t4] = fht(g, 10, 100, [1,2], 7, 5);
+%disp(test(2));
+%plot(t4)
+%disp(test(1));
 
-disp(test(2));
-
-plot(t4)
-
-disp(test(1));
-
-b = -2*k.*hat(f,k, pi/numel(f)*(0:numel(f)-1),1 );
-a = 2*k.*hat(g,k);
+b = -2*k.*hat(f, sqrt(ss(x)), k, 1 )./sqrt(num_k);
+a = 2*k.*hat(g,sqrt(ss(x)), k, 0)./sqrt(num_k);
 
 figure(1);
 plot(k, a);
@@ -86,9 +88,10 @@ Phi = zeros(num_la, num_k);
 
 for i=1:num_la
   disp(i)
-  Psi(i, :) = hat2(psi(la_list(i)),k)./(num_k.^2);
-  Phi(i, :) = x.^(-1/2).*hat2(phi(la_list(i)), k, pi/numel(f)*(0:numel(f)-1),1)./(num_k.^2);
+  Psi(i, :) = hat(psi(la_list(i)), k, sqrt(s), 0)./sqrt(num_k);
+  Phi(i, :) = s.^(-1/2).*hat(phi(la_list(i)),  k, sqrt(s), 1)./sqrt(num_k); %replaced h with the correct phi
 end
+
 
 figure(3);
 mesh(Psi);
@@ -100,6 +103,8 @@ eta = zeros(num_la, num_x);
 u = zeros(num_la, num_x);
 xx = zeros(num_la, num_x);
 tt = zeros(num_la, num_x);
+
+x = s
 
 for i=1:num_x
   %CG transform
