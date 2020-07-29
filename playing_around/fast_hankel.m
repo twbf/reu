@@ -5,9 +5,9 @@ format longE
 
 num_x = 1000;
 num_k = 1000;
-num_la = 50;
+num_la = 100;
 
-x = linspace(0,15,num_x);
+x = linspace(0,30,num_x);
 k = linspace(0,70,num_k);
 la_list = linspace(0,3,num_la);
 eta_0 = @(x) 0.1*exp(-(x-5).^2);
@@ -50,8 +50,17 @@ for i=1:num_x
   f(i) = [1 0]*p*x(i).^(1/2);
 end
 
+ss = @(x) cos(x);
+[test t1 t2 t3 t4] = fht(g, 10, 100, [1,2], 7, 5);
+
+disp(test(2));
+
+plot(t4)
+
+disp(test(1));
+
 b = -2*k.*hat(f,k, pi/numel(f)*(0:numel(f)-1),1 );
-a = 2*k.*ht(g,k);
+a = 2*k.*hat(g,k);
 
 figure(1);
 plot(k, a);
@@ -77,8 +86,8 @@ Phi = zeros(num_la, num_k);
 
 for i=1:num_la
   disp(i)
-  Psi(i, :) = ht(psi(la_list(i)),k)./(num_k.^2);
-  Phi(i, :) = x.^(-1/2).*hat(phi(la_list(i)), k, pi/numel(f)*(0:numel(f)-1),1)./(num_k.^2);
+  Psi(i, :) = hat2(psi(la_list(i)),k)./(num_k.^2);
+  Phi(i, :) = x.^(-1/2).*hat2(phi(la_list(i)), k, pi/numel(f)*(0:numel(f)-1),1)./(num_k.^2);
 end
 
 figure(3);

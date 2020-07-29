@@ -1,0 +1,101 @@
+\documentclass{article}
+\usepackage{amsmath,geometry}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\title{ What happens when Det(D) = 0 }
+
+\begin{document}
+
+\maketitle
+
+Problem: On line 358 in "The generalized Carrier-Greenspan Transform ..." version 4/6/20 there is a matrix differential operator, D. Of course, when the determinate of D = 0, D is non-invertible and the data projection algorithm in the paper fails.
+
+Clarification: This is written with two assumption. One, all definitions prior to line 358 hold. Second, $\omega = 1$, meaning that we have a flat plane beach.
+
+We begin with the det(D)
+
+\[
+\begin{aligned}
+det(D) &= det\begin{pmatrix} \sigma_b^\prime(\tau) & -1 \\ -\sigma_b(\tau) & \sigma_b^\prime(\tau) \end{pmatrix} 
+ \\ &= (\sigma_b^\prime(\tau))^2 - \sigma_b(\tau)
+\end{aligned}
+\]
+
+by setting the determinant equal to zero and solving for $\sigma_b^\prime(\tau)$ we get
+
+\begin{align}
+\sigma_b^\prime(\tau) = \pm\sqrt{\sigma_b(\tau)}
+\end{align}
+
+
+Now we introduce new functions $\hat{\sigma_b}(t - u_b(t))$ and $\hat{\sigma_b^\prime}(t - u_b(t))$ which are respectively equivalent through the a change of variables to $\sigma_b(\tau)$ and $\sigma_b^\prime(\tau)$. Using the chain rule we can define 
+
+\[
+\begin{aligned}
+\hat{\sigma_b}(t - u_b(t)) & = l +\eta_b(\gamma(t-u_b(t)) \\ &= l + \eta_b(t) \\
+\hat{\sigma_b^\prime}(t - u_b(t)) &= \eta_b^\prime(t)
+\end{aligned}
+\]
+
+
+where primes now denote derivatives with respect to t. With these new sigma variables substituted into (1) we get a new equation:
+
+\begin{align}
+\eta_b^\prime(t) = \pm \sqrt{l + \eta_b(t)}
+\end{align}
+
+Recall that the slope of the bathymetry is 1 and $h(x) = -x$ so $l$ is both the x location of the boundary and the still water depth. In words, equation (2) means that the rate of change of the height along the boundary condition is equal to the plus or minus square root of the height of the water when the $det(D) = 0$.
+
+In order to understand what this breaking condition means we have to look at Antuono and Brocchini's work in their 2007 and 2010 paper. They define $d = \eta + h$ and $c = \sqrt{d}$ thus 
+
+\[
+\begin{aligned}
+c = \sqrt{\eta + h}.
+\end{aligned}
+\]
+
+When  $det(D) = 0$, (2) holds true thus we can assert that
+
+\begin{align}
+c = \eta_b^\prime(t)
+\end{align}
+
+Antuono and Brocchini state that the characteristic form is
+
+\begin{align}
+\frac{d \alpha}{dt} = 0 \text{ along curves where } \frac{dx}{dt} = u + c \\
+\frac{d \beta}{dt} = 0 \text{ along curves where } \frac{dx}{dt} = u - c
+\end{align}
+
+
+where $\alpha = 2c + u + t$ and $\beta = 2c - u - t$. Thus we can state that when the $det(D) = 0$:
+
+
+\begin{align}
+\frac{dx}{dt} &= u + \eta_b^\prime(t)\\
+\frac{dx}{dt} &= u - \eta_b^\prime(t)
+\end{align}
+
+This is where multiple cases appear. It is easy to understand what this means when $\tau = t$. In other words when $u = 0$ and $u^\prime = 0$.
+ 
+One more idea is needed. $\Gamma_b$, defined right below line 355, is a parameterized curve. It is possible to define this curve as $\frac{d\sigma}{d\tau}$ with an initial point as such:
+
+\begin{align}
+\frac{d\sigma}{d\tau} &= \eta_b^\prime(\gamma_b(\tau))\gamma_b^\prime \\ &= \frac{\eta_b^\prime(\gamma_b(\tau))}{1-u^\prime(\gamma_b(\tau))}\\
+(\sigma, \tau) &= (\sigma_0, \tau_0)
+\end{align}
+
+In the case that $u = 0$ and $u^\prime = 0$ both (9) and (6) simplify to
+
+\begin{align}
+\frac{dx}{dt} &= \eta_b^\prime(t)\\
+\frac{d\sigma}{d\tau} &= \eta_b^\prime(\tau)
+\end{align}
+
+thus when the $det(D) = 0$ and for this case $\Gamma_b$ is in the same direction as the characteristic. Consequently we are trying to project the same information to multiple points along the line $\sigma = \sigma_0 = l +\eta_0(l,0)$.
+
+	For $u$ and $u^\prime$ not equal to zero both curves become much more complicated locally. My understanding is that at different points along $\frac{d\sigma}{d\tau}$ the characteristic curves $\frac{dx}{dt}$ intersect at $\sigma = \sigma_0$. This could be because they are the same curve (the case examined) or because the speed changes at the right rate to make these characteristic curves intersect at $\sigma = \sigma_0$.
+	
+	
+	
+\end{document} 
