@@ -8,11 +8,15 @@ function [ana_eta, ana_u] = CG_transform(loadd,save_name, size, data_proj, zero_
     disp("Nicolcsky Anaylytic:");
 
     if loadd
-        load(save_name, 'phi', 'psi');
+        load(save_name, 'phi', 'psi', 'a');
     else
         [psi, phi] = realDeal(data_proj, zero_inital_u, save_name);
     end
 
+    figure(1)
+    plot(a)
+
+    stop
     %Parameters -----
     lambda_list = linspace(lowL, upL, size); %lambda space
     s = linspace(lowS, upS, size); %s space   note: at s = 0 regularization is needed - more on this later

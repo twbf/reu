@@ -50,7 +50,7 @@ upS = Xf+1;   %upper bound on s
 lowL = t0;  %lower bound on lambda
 upL = 10;   %upper bound on lambda
 
-K = 30; % upper bound on integration parameter
+K = 0.1; % upper bound on integration parameter
 
 [ana_eta, ana_u] = CG_transform(true,'zero_initial_u_catalina_k30.mat', res, false, true);
 

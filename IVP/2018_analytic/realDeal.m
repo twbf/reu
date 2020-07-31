@@ -84,6 +84,9 @@ function [psi, phi] = realDeal(data_proj, zero_inital_u, save_name)
         disp('zero initial velocity so setting a....')
         a = chebfun(@(k) 2*k*sum(eta_0(x).*j0(2.0*k*sqrt(x + eta_0(x))).*(1 + eta_prime(x))), [0 K]);
 
+        figure(1)
+        plot(a)
+
         disp('b = 0....')
         b = chebfun(@(k) 0, [0 K]);
 

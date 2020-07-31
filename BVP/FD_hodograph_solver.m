@@ -1,10 +1,10 @@
 %number of s and lambda points
 num_s = 1000;
-num_la = 100;
+num_la = 100000;
 
 %range over which we solve
-s = linspace(0, 10, num_s);
-la = linspace(0, 1, num_la);
+s = linspace(0, 1, num_s);
+la = linspace(0, 0.001, num_la);
 
 ds = s(2) - s(1);
 dla = la(2) - la(1);
@@ -16,7 +16,7 @@ psi_0 = s*0;
 
 %boundary
 phi_b = la*0;
-psi_b = la*0 + -0.000000001;
+psi_b = la*0 + -0.00001;
 
 phi = zeros(num_la, num_s);
 psi = zeros(num_la, num_s);
@@ -44,4 +44,4 @@ figure(1);
 mesh(phi);
 
 figure(2);
-mesh(psi);
+plot(psi(1,:));
