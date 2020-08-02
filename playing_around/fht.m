@@ -51,9 +51,10 @@ if N > 1
    k=K;
    I=n;
 else
-   if ~isempty(h) & isa(h,'numeric')
-      error('Need a function h(r) without kernel.');
-   end
+  %trying to see if I can make it work
+   %if ~isempty(h) & isa(h,'numeric')
+    %  error('Need a function h(r) without kernel.');
+   %end
    if nargin < 5 | isempty(M)
       M=7;
    end
@@ -62,6 +63,7 @@ else
    end
    a=K*R/2/pi;
    N=pow2(ceil(1 + log2(a*m*log(a*M))));
+   disp(N)
    a=1/a/m;
    ro=R*exp(-a*N/2);
    ko=K*exp(-a*N/2);
@@ -76,6 +78,11 @@ else
    if ~isa(h,'numeric')
       h=feval(h,r);
    end
+   disp(size(h));
+   disp(size(r));
+   disp(size(N));
+   disp(size(I));
+
    H=fft(fft(h.*r,N).*I);                 % transform
    if isreal(h)
       H=real(H);

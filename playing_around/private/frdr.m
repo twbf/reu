@@ -11,7 +11,7 @@
 %              The integration interval is [0,r(end)].
 %
 
-%     Marcel Leutenegger © June 2006
+%     Marcel Leutenegger ï¿½ June 2006
 %
 function w=frdr(f,r)
 w=numel(r);
