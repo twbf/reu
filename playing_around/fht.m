@@ -63,7 +63,6 @@ else
    end
    a=K*R/2/pi;
    N=pow2(ceil(1 + log2(a*m*log(a*M))));
-   disp(N)
    a=1/a/m;
    ro=R*exp(-a*N/2);
    ko=K*exp(-a*N/2);
@@ -78,14 +77,11 @@ else
    if ~isa(h,'numeric')
       h=feval(h,r);
    end
-   disp(size(h));
-   disp(size(r));
-   disp(size(N));
-   disp(size(I));
 
-   H=fft(fft(h.*r,N).*I);                 % transform
+   H=fft(fft(h,N).*I);                 % transform
    if isreal(h)
       H=real(H);
    end
    H=2*pi*H(1:N/2)./k;
+   %k = 2*sqrt(k);
 end

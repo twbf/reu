@@ -11,7 +11,7 @@ function out = sss(inn, which)
   x2 = 1.6384;
 
 
-  eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-3, 10]);
+  eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [0, 10]);
   eta_prime = diff(eta_0);
 
   %u_0   = chebfun(@(x) -eta_0(x)/sqrt(x+eps), [0 100]);
@@ -45,6 +45,9 @@ function out = sss(inn, which)
     %g(i) = [0 1]*p;
     %f(i) = [1 0]*p*s_s.^(1/2);
   end
+
+  %figure(10)
+  %plot(out-eta_0(linspace(0,10,2000)))
 
 
 
