@@ -8,8 +8,8 @@ num_k = 2000;
 num_s = 2000;
 num_la = 2;
 
-x = linspace(0.1,10,num_x);
-k = linspace(0.1,30,num_k);
+x = linspace(0.1,80,num_x);
+k = linspace(0.1,100,num_k);
 la_list = linspace(0,2.5,num_la);
 s = linspace(0,10,num_s);
 
@@ -36,14 +36,17 @@ b = -2*k.*ihat(sss(x, false), sqrt(x), 2*k, 1);
 
 %a_fht = ifht(sss(x, true), k , sqrt(x),  0);
 
-tda = @(vx) interp1(x, sss(x, true), vx);
-[a_fht td] = fht(tda, 1, 1, 0, 7, 5);
+%tda = @(vx) interp1(x, sss(x, true), vx);
+a_fht  = ifht(sss(x, true), k, x);
+
+
 
 
 %a_ihat = 2*k.*ihat(sss(x, true), sqrt(x), 2*k, 0);
 
 figure(1);
-plot(td, a_fht)
+plot(k, a_fht)
+
 
 stop
 

@@ -11,10 +11,11 @@ function out = sss(inn, which)
   x2 = 1.6384;
 
 
-  eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [0, 10]);
-  eta_prime = diff(eta_0);
+  %eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2, 20]);
+  %eta_prime = diff(eta_0);
 
   %u_0   = chebfun(@(x) -eta_0(x)/sqrt(x+eps), [0 100]);
+  %u_0   = chebfun(@(x) 0.01*sin(5*x), [0 100]);
   %u_prime = diff(u_0);
   u_0 = @(x) 0;
   u_prime = @(x) 0;
