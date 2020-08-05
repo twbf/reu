@@ -98,5 +98,5 @@ for i = 1:200
   plot(x_plot, -x_plot), hold off;
   axis([-1 10 -0.2 0.2])
   pause(0.05);
-
+  stop
 end
