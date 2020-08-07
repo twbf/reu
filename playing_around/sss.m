@@ -1,7 +1,7 @@
 function out = sss(inn, which)
 
-  eta_0 = @(x) 0.1*exp(-(x-5.1).^2);
-  eta_prime = @(x) -2*0.1*(x-5.1).*exp(-(x-5.1).^2);
+  eta_0 = @(x) 0.1*exp(-(x-5).^2);
+  eta_prime = @(x) -2*0.1*(x-5).*exp(-(x-5).^2);
 
   H1 = 0.006;
   H2 = 0.018;
@@ -11,8 +11,8 @@ function out = sss(inn, which)
   x2 = 1.6384;
 
 
-  %eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2, 20]);
-  %eta_prime = diff(eta_0);
+  eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2, 20]);
+  eta_prime = diff(eta_0);
 
   %u_0   = chebfun(@(x) -eta_0(x)/sqrt(x+eps), [0 100]);
   %u_0   = chebfun(@(x) 0.01*sin(5*x), [0 100]);
@@ -42,7 +42,7 @@ function out = sss(inn, which)
       out(i) = [1 0]*p*inn(i).^(1/2);
     end
 
-    
+
 
     %g(i) = [0 1]*p;
     %f(i) = [1 0]*p*s_s.^(1/2);

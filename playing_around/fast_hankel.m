@@ -3,18 +3,20 @@ close all
 format longE
 % just testing out fast foureir transform
 
-num_x = 4000;
-num_k = 4000;
-num_s = 4000;
-num_la = 200;
+num_x = 8000;
+num_k = 8000;
+num_s = 8000;
+num_la = 800;
 
 x = linspace(0,10,num_x);
-k = linspace(0,35,num_k);
+k = linspace(0,30,num_k);
 la_list = linspace(0,10,num_la);
 s = linspace(0,10,num_s);
 
 b = -2*k.*ihat(sss(x, false), sqrt(x), 2*k, 1)./50;
-a = 2*k.*ihat(sss(x, true), sqrt(x), 2*k, 0)./50;
+%a = 2*k.*ihat(sss(x, true), sqrt(x), 2*k, 0)./50;
+load('zero_initial_k30', 'a');
+a = a(k);
 
 figure(1);
 plot(k, a);
@@ -32,8 +34,8 @@ for i=1:num_la
   [Phi(i,:) r_phi] = fht(phi, 30, 7, 1, 20, 15); % needsa to include s^(-1/2)
 
   %need to deal with scalling
-  Psi(i, :) = Psi(i, :);
-  Phi(i, :) = Phi(i, :);
+  Psi(i, :) = Psi(i, :)./6;
+  Phi(i, :) = Phi(i, :)./6;
   %Phi(i, :) = s.^(-1/2).*hat(phi(la_list(i)),  k, 2*sqrt(s), 1); %replaced h with the correct phi
 end
 
@@ -89,14 +91,13 @@ test(1,6);
 
 
 
-x_plot = linspace(-1, 10, 1000);
-t_plot = linspace(0, 10, 200);
+x_plot = linspace(-1, 10, 8000);
+t_plot = linspace(0, 10, 800);
 pause(4);
-for i = 1:200
-  plot(x_plot, test(x_plot, repmat(t_plot(i), 1, 1000))), hold on;
+for i = 1:800
+  plot(x_plot, test(x_plot, repmat(t_plot(i), 1, 8000))), hold on;
   plot(x_plot, eta_fvm(:, i)'), hold on;
   plot(x_plot, -x_plot), hold off;
-  axis([-1 10 -0.2 0.2])
-  pause(0.05);
-  stop
+  axis([-1 10 -0.03 0.03])
+  pause(0.0001);
 end

@@ -57,6 +57,9 @@ function [eta, u] = run_num()
     x1 = 4.1209;
     x2 = 1.6384;
 
+    eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [-2, 20]);
+    eta_prime = diff(eta_0);
+
     disp(" ")
     disp("Deny's Numeric:");
 
@@ -74,7 +77,7 @@ function [eta, u] = run_num()
     b  = 10;	% the right boundary (wall)
 
     %%% Numerical parameters:
-    N  = 1000;							% number of grid points
+    N  = 8000;							% number of grid points
     x  = linspace(a, b, N+1)';			% cell interfaces (the apostrophe is to transpose)
     dx = x(2) - x(1);                  	% spatial grid step
     xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
@@ -82,7 +85,7 @@ function [eta, u] = run_num()
     %%% Bathymetry function:
     h  = td*xc;
 
-    mm=1000;
+    mm=8000;
 
     small_h = h(1:mm);
 
@@ -116,7 +119,7 @@ function [eta, u] = run_num()
     fprintf(' Done\n');
 
     %%% Post-processing of the solution:
-    M     = 200;	% number of time instances where we project solution
+    M     = 800;	% number of time instances where we project solution
     tlist = linspace(t0, Tf, M);
     solpr = deval(sol, tlist);
 
