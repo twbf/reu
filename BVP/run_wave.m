@@ -97,13 +97,13 @@ fprintf(' Done\n');
 
 
 %%% Post-processing of the solution:
-M     = 200;	% number of time instances where we project solution
+M     = 5000;	% number of time instances where we project solution
 tlist = linspace(t0, Tf, M);
 solpr = deval(sol, tlist);
 
 eta=solpr(501,:);
 figure(15)
-plot(eta) 
+plot(eta)
 
 figure(16)
 plot(h)
@@ -139,7 +139,7 @@ Rup = Rup - Rup(1);
 %  for t=1:M % loop in time
 %      ind1 = find(solpr(501,t) > 1e-2, 1, 'first');
 %      eta(t) = -h(ind1);
-%  
+%
 %  	Plot(tlist(t), solpr(501,t));
 %  end % for t
 

@@ -47,4 +47,4 @@ if numel(n) > 1
 else
    I=besselj(n,k*r(:).');
 end
-h=reshape(frdr(H,k).'*I/(2*pi)^2,size(r));
+h=reshape(H*I/(2*pi)^2,size(r));

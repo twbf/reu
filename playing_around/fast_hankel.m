@@ -8,21 +8,27 @@ num_k = 8000;
 num_s = 8000;
 num_la = 800;
 
-x = linspace(0,10,num_x);
-k = linspace(0,30,num_k);
+x = linspace(0.1,10,num_x);
+k = linspace(0.1,30,num_k);
 la_list = linspace(0,10,num_la);
 s = linspace(0,10,num_s);
 
-b = -2*k.*ihat(sss(x, false), sqrt(x), 2*k, 1)./50;
-%a = 2*k.*ihat(sss(x, true), sqrt(x), 2*k, 0)./50;
+%b = -2*k.*ihat(sss(x, false), sqrt(x), 2*k, 1);
+a1 = k.*ifht(sss(x, true), x, k, 0);
+%a = fht(sss(x, true), 30, 7, 0);
+
+figure(1);
+plot(a1);
+
 load('zero_initial_k30', 'a');
 a = a(k);
 
-figure(1);
-plot(k, a);
-
 figure(2);
-plot(k, b);
+plot(k, a-a1);
+
+stop
+
+
 
 for i=1:num_la
   disp(i)
