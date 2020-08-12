@@ -27,24 +27,30 @@ if sum(size(H) > 1) > 1
    error('Spectrum must be a vector.');
 end
 if nargin < 2 | isempty(k)
+   disp('test1')
    k=pi/numel(H)*(0:numel(H)-1).';
 else
+   disp('test2')
    [k,w]=sort(k(:));
    H=H(w);
 end
 if nargin < 3 | isempty(r)
+   disp('test3')
    r=0:numel(H)-1;
 end
 if nargin < 4 | isempty(n)
+   disp('test4')
    n=0;
 end
 if numel(n) > 1
    if exist('w','var')
+      disp('test5')
       I=n(w,:);
    else
+      disp('test6')
       I=n;
    end
 else
    I=besselj(n,k*r(:).');
 end
-h=reshape(H*I/(2*pi)^2,size(r));
+h=reshape(H*I,size(r));

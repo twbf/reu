@@ -39,7 +39,7 @@ else
    I=[k k(end)*exp(a*(1:N))];
    I=ifft(a*r(1)*I.*besselj(n,r(1)*I));
 end
-h=fft(fft(H,2*N).*I);
+h=fft(fft(H.*k,2*N).*I);
 if isreal(H)
    h=real(h);
 end
