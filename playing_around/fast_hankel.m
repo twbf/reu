@@ -21,13 +21,21 @@ b = -2*k.*ihat(sss(x, false), sqrt(x), 2*k, 1)./x_density;
 a = 2*k.*ihat(sss(x, true), sqrt(x), 2*k, 0)./x_density;
 
 figure(1);
+plot(x, sss(x, false));
+
+figure(1);
+plot(x, sss(x, true));
+
+figure(3);
 plot(k, a);
 
 %load('zero_initial_k30', 'a');
 %a = a(k);
 
-figure(2);
+figure(4);
 plot(k, b);
+
+stop
 
 
 for i=1:num_la
