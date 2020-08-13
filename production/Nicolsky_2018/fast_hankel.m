@@ -2,21 +2,32 @@
 function [eta u] = fast_hankel()
 
   global x k la s  %variables
-  global x_res t_res Xf %resolution
+  global x_res t_res Xf g td %resolution
 
   x_density = x_res/Xf;
 
   %data_projection
+
+  disp('    data_projection onto \lambda = 0... ');
   proj = order1_dp(s);
 
+  global eta_0 u_0 %for comparing with data_projection
+
   figure(1);
-  plot(s, proj(1, :));
+  plot(s, proj(1, :)), hold on;
+  plot(s, u_0(s));
+
 
   figure(2);
-  plot(s, proj(2, :));
+  plot(s, proj(2, :)), hold on;
+  plot(s, eta_0(s)+u_0(s).^2/2);
 
+
+  disp('    inverse hankel transform to compute a(k) and b(k)... ');
+
+  %for the analytic solution to work properly both a and b need to be very
+  %close to zero at the end of the domain of k
   a = 2*k.*ihat(proj(2, :) , sqrt(s), 2*k, 0)./x_density;
-
   b = -2*k.*ihat(proj(1, :) , sqrt(s), 2*k, 1)./x_density;
 
   figure(3);
@@ -26,8 +37,9 @@ function [eta u] = fast_hankel()
   plot(k, b);
 
 
+  disp('    fast hankel transform to compute psi and phi... ');
+
   for i=1:t_res
-    disp(i)
 
     psi_freq = @(vk)  interp1(k, a , vk).*cos(la(i)*vk) + interp1(k, b , vk).*sin(la(i)*vk);
     phi_freq = @(vk)  interp1(k, a , vk).*sin(la(i)*vk) - interp1(k, b , vk).*cos(la(i)*vk);
@@ -42,14 +54,15 @@ function [eta u] = fast_hankel()
 
   r_size = size(psi); %same for phi and psi
 
-  figure(3);
-  mesh(psi)
 
-  figure(3);
-  mesh(repmat(r_psi.^2./4, t_res, 1), repmat(la.', 1, r_size(2)), psi);
+  %to display phi and psi
+    %figure(3);
+    %mesh(repmat(r_psi.^2./4, t_res, 1), repmat(la.', 1, r_size(2)), psi);
 
-  figure(4);
-  mesh(repmat(r_phi.^2./4, t_res, 1), repmat(la.', 1, r_size(2)), phi);
+    %figure(4);
+    %mesh(repmat(r_phi.^2./4, t_res, 1), repmat(la.', 1, r_size(2)), phi);
+
+  disp('    backwards CG transform and demensionalization... ');
 
   eta = zeros(t_res, r_size(2));
   u = zeros(t_res, r_size(2));
@@ -64,12 +77,19 @@ function [eta u] = fast_hankel()
     tt(:,i) = u(:,i) + la';
 
     %deminsionalizing
-    u(:,i) = u(:,i)*sqrt(9.81);
-    tt(:,i) = tt(:,i)./sqrt(9.81);
+    u(:, i) = u(:, i)*sqrt(g*td);
+    eta(:, i) = eta(:, i);
+    tt(:, i) = tt(:, i)/sqrt(td*g);
   end
 
-  figure(5);
-  mesh(tt,xx,eta);
+  %to display eta and u
+    %figure(5);
+    %mesh(tt,xx,eta);
+
+    %figure(5);
+    %mesh(tt,xx,u);
+
+  disp('    scattered interpolation of eta and u... ');
 
   s_tt = reshape(tt, [t_res*r_size(2), 1]);
   s_xx = reshape(xx, [t_res*r_size(2), 1]);

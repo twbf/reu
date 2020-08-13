@@ -50,7 +50,6 @@ function [eta, u] = run_num()
     LW = 'LineWidth';
 
     %%% Physical parameters:
-    g  = 9.8;	% gravity acceleration
     g2 = 0.5*g;	% g/2
     cf2 = 0.0;	% friction coefficient
 
