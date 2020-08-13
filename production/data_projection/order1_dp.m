@@ -1,7 +1,10 @@
 
-% Order 1 data_projection
-
-% Refernce [Nicolsky et. al 2018]
+%   ORDER 1 INITIAL CONDITION DATA PROJECTION
+%
+% We use the explicit 1st order expansion of the data projection algorethem that
+% that is in Nicolsky et. al 2018
+%
+% Refernce = [Nicolsky et. al 2018]
 
 function Phi = order1_dp(x)
 
@@ -16,7 +19,8 @@ function Phi = order1_dp(x)
   phi0 = @(x) [u_0(x) ; eta_0(x)+(u_0(x).^2)/2];
   phi0_prime = @(x) [u_prime(x); eta_prime(x)+u_0(x)*u_prime(x)];
 
-  proj = @(x) phi0(x) + u_0(x).*(u_prime(x).*A(x)*inv(D(x))*B*phi0(x) - B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
+  proj = @(x) phi0(x) + u_0(x).*(u_prime(x).*A(x)*inv(D(x))*B*phi0(x) -...
+   B*phi0(x) - A(x)*inv(D(x))*phi0_prime(x));
 
 
   x_num = size(x);

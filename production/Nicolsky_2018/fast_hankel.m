@@ -1,5 +1,16 @@
 
+%     FAST HANKEL SOLUTION TO 1 SPACIAL DEMENTION SWE
+%
+% We use an inverse hankel transfrom (not fast) for the computation of
+% a(k) and b(k). Then we use a fast hankel transform for the compuatation of
+% phi and psi. Finally, we use the CG transform to go back to original variables
+% in (x,t) then return a scattered interpolant of eta and u.
+%
+% Refernce = [Nickolsky et. al. 2018]
+
 function [eta u] = fast_hankel()
+
+  disp('analytic solution... ');
 
   global x k la s  %variables
   global x_res t_res Xf g td %resolution
@@ -20,7 +31,8 @@ function [eta u] = fast_hankel()
 
   figure(2);
   plot(s, proj(2, :)), hold on;
-  plot(s, eta_0(s)+u_0(s).^2/2);
+  plot(s, eta_0(s)+u_0(s).^2/2), hold on;
+  plot(s, eta_0(s));
 
 
   disp('    inverse hankel transform to compute a(k) and b(k)... ');
