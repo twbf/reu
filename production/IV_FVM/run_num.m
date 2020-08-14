@@ -44,6 +44,8 @@ function [eta, u] = run_num()
     global eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
     global x_res t_res %resolution
 
+    fprintf('Numeric Simulation...\n');
+
     FS = 'FontSize';
     IN = 'Interpreter';
     LS = 'LineStyle';
@@ -94,9 +96,7 @@ function [eta, u] = run_num()
 
     %%% We run the simulation:
     options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
-    fprintf('Numeric Simulation...\n');
     sol = ode23(@RHS, [t0 Tf], w0, options);
-    fprintf(' Done\n');
 
     %%% Post-processing of the solution:
     M     = t_res;	% number of time instances where we project solution

@@ -1,0 +1,334 @@
+% A program that computes Psi_n (via Data Proj) by fitting chebfuns
+
+function [Psi_nT, Psi_nB] = BCproj()
+
+
+global M N g g2 a b d
+global td H1 H2 c1 c2 x1 x2
+global eta1 u1
+
+% loading data from run wave
+
+% parameters
+n = 5;
+ChebDiv = 2;
+chebN = 25;
+
+g = 9.81;
+g2 = 0.5*g;
+d=1;
+
+t0 = 0;                         % intial time
+tf = 10;                        % final time
+
+u1_dim = u1;
+eta1_dim = eta1;
+
+% removing dimensions
+t_dim = linspace(t0,tf,M);
+t = t_dim/(sqrt(d/g));          % dimensionless time
+
+eta = eta1_dim/(d);             % dimensionless eta
+
+u = u1_dim/(sqrt(g*d));         % dimensionless u
+
+% computing lambda
+lambda = t-u;                % lambda array
+
+% polynomial fitting to find gamma(lambda)
+gammaCoeff = polyfit(lambda, t, 1);
+gamma = polyval(gammaCoeff, t);
+
+% computing eta at gamma
+etaGamma = interp1(t,eta,gamma);
+etaGamma(end) = etaGamma(end-1);
+
+% sigma at boundary
+sigma = etaGamma+1;
+
+% computing psi_0 vector
+Psi0T = gamma-lambda;                     % top component (phi)
+Psi0B = etaGamma+0.5*(gamma-lambda).^2;   % bottom component (psi)
+Psi0 = [Psi0T;Psi0B];
+% reshaping Psi0T,Psi0B,lambda and sigma for fitting multiple chebfuns
+column = ChebDiv;                            % number of chebfuns to be fit
+row = M/ChebDiv;                             % number of points being fit
+
+while row ~= floor(row)
+    column = column+1;                 % ensures number of columns is an integer
+    row = M/column;
+end
+
+Psi0T = reshape(Psi0T, [row, column]);
+Psi0B = reshape(Psi0B, [row, column]);
+lambda = reshape(lambda, [row, column]);
+sigma = reshape(sigma, [row, column]);
+
+% Repeating elements
+% Elements at tops of columns moved to bottom and bottoms moved to top to create
+% overlap in domains and reduce error in further derivatives
+domOL = 5;                          % domain overlap
+rowOL = row+2.*domOL;               % row overlap
+
+repT = 1:domOL;                     % identifies top elements to replace
+repB = (rowOL-domOL+1):rowOL;       % identifies bottom elements to replace
+idT = rowOL-2.*domOL+1:rowOL-domOL; % identifies top elements of original matrix
+idB = domOL+1:2.*domOL;             % identifies bottom elements of original matrix
+
+zB = zeros(domOL, column);          % added to bottom of matrix
+zT = zeros(domOL, column);          % added to top of matrix
+
+lambdaOL = [zT;lambda;zB];                  % modified matricies
+sigmaOL = [zT;sigma;zB];
+Psi0BOL = [zT;Psi0B;zB];
+Psi0TOL = [zT;Psi0T;zB];
+
+lambdaOL(repB,column) = lambdaOL(rowOL-domOL, column);   % assigning values to
+sigmaOL(repB,column) = sigmaOL(rowOL-domOL, column);     % end of last column
+Psi0BOL(repB,column) = Psi0BOL(rowOL-domOL, column);
+Psi0TOL(repB,column) = Psi0TOL(rowOL-domOL, column);
+
+lambdaOL(repT,1) = lambdaOL(domOL+1,1);             % assigning values to
+sigmaOL(repT,1) = sigmaOL(domOL+1,1);               % begining of first column
+Psi0BOL(repT,1) = Psi0BOL(domOL+1,1);
+Psi0TOL(repT,1) = Psi0TOL(domOL+1,1);
+
+for i=1:column-1
+    lambdaOL(repB,i) = lambdaOL(idB,i+1);       % lambdaOL
+    lambdaOL(repT,i+1) = lambdaOL(idT,i);
+    sigmaOL(repB,i) = sigmaOL(idB,i+1);         % sigmaOL
+    sigmaOL(repT,i+1) = sigmaOL(idT,i);
+    Psi0TOL(repB,i) = Psi0TOL(idB,i+1);         % Psi0TOL
+    Psi0TOL(repT,i+1) = Psi0TOL(idT,i);
+    Psi0BOL(repB,i) = Psi0BOL(idB,i+1);         % Psi0BOL
+    Psi0BOL(repT,i+1) = Psi0BOL(idT,i);
+end
+
+% fitting chebfuns to Psi0T, Psi0B, and sigma (as functions of lambda)
+for i=1:column
+    l0_OL = lambdaOL(1,i);              % begining of overlaping domain
+    lf_OL = lambdaOL(rowOL,i);          % end of overlaping domain
+    l0 = lambda(1,i);                   % begining of domain
+    lf = lambda(row,i);                 % end of domain
+    
+    % overlaping chebfuns
+    chebPsi0BOL = polyfit(lambdaOL(:,i),Psi0BOL(:,i),chebN,domain(l0_OL,lf_OL));
+    chebPsi0TOL = polyfit(lambdaOL(:,i),Psi0TOL(:,i),chebN,domain(l0_OL,lf_OL));
+    chebSigmaOL = polyfit(lambdaOL(:,i),sigmaOL(:,i),chebN,domain(l0_OL,lf_OL));
+    
+    % saving overlaping chebfuns
+    save(sprintf('chebPsi0BOL_%d.mat',i), 'chebPsi0BOL');
+    save(sprintf('chebPsi0TOL_%d.mat',i), 'chebPsi0TOL');
+    save(sprintf('chebSigmaOL_%d.mat',i), 'chebSigmaOL');
+    
+    % restricting functions so domains do not overlap
+    chebPsi0B = restrict(chebPsi0BOL, [l0, lf]);
+    chebPsi0T = restrict(chebPsi0TOL, [l0, lf]);
+    chebSigma = restrict(chebSigmaOL, [l0, lf]);
+    
+    % saving chebfuns
+    save(sprintf('chebPsi0B_%d.mat',i), 'chebPsi0B');
+    save(sprintf('chebPsi0T_%d.mat',i), 'chebPsi0T');
+    save(sprintf('chebSigma_%d.mat',i), 'chebSigma');
+end
+
+% creating elements of matrix D
+
+% derivative of sigma with respect to lambda (chebfun)
+for i=1:column
+    load(sprintf('chebSigma_%d.mat',i), 'chebSigma')
+    cheb_dsdl = diff(chebSigma);
+    save(sprintf('cheb_dsdl_%d.mat',i), 'cheb_dsdl')
+end
+
+% derivative of sigma with respect to lambda (evaluated)
+dsdl = zeros(row,column);
+for i=1:column
+    load(sprintf('cheb_dsdl_%d.mat',i), 'cheb_dsdl')
+    dsdl(:,i) = cheb_dsdl(lambda(:,i));
+end
+dsdl = reshape(dsdl,[1,M]);
+
+% evaluating sigma at lambda
+sl = zeros(row,column);
+for i=1:column
+    load(sprintf('chebSigma_%d.mat',i), 'chebSigma')
+    sl(:,i) = chebSigma(lambda(:,i));
+end
+sl = reshape(sl,[1,M]);
+
+% repeating minus 1
+minusone = repelem(-1,M);
+
+% creating and inverting matrix D
+invD = zeros(4,M);
+for i=1:M
+    matrixD = [dsdl(i),minusone(i);-sl(i),dsdl(i)];
+    invD = inv(matrixD);
+    invLT(1,i) = invD(1,1);                   % left-top element
+    invRT(1,i) = invD(1,2);                   % right-top element
+    invLB(1,i) = invD(2,1);                   % left-bottom element
+    invRB(1,i) = invD(2,2);                   % right-bottom element
+    invD = [invLT;invRT;invLB;invRB];         % inverted matrix D (4xM matrix
+    
+    % checking the deteriminant
+    det0 = det(matrixD);
+    if det0 == 0
+        disp('detD=0')
+    end
+end
+
+% computing Psi_n
+
+% initializing arrays
+F_kT = zeros(row,column);
+F_kB = zeros(row,column);
+F_kTdl = zeros(row,column);
+F_kBdl = zeros(row,column);
+F_kTsum = zeros(n,M);
+F_kBsum = zeros(n,M);
+Psi_nT = zeros(1,M);
+Psi_nB = zeros(1,M);
+
+% initializing F_kT and F_kB
+for i=1:column
+    load(sprintf('chebPsi0BOL_%d.mat',i), 'chebPsi0BOL');
+    load(sprintf('chebPsi0TOL_%d.mat',i), 'chebPsi0TOL');
+    cheb_F_kTOL = chebPsi0TOL;
+    cheb_F_kBOL = chebPsi0BOL;
+    save(sprintf('F_kTOL_%d.mat',i), 'cheb_F_kTOL');
+    save(sprintf('F_kBOL_%d.mat',i), 'cheb_F_kBOL');
+end
+term1store = zeros(n,1);
+% main loop
+for i=1:n
+    % computing first term in sumation
+    term1 = ((1-sl).^i)/factorial(i);
+    % computing F_kT, F_kTdl and F_kBdl
+    for j=1:column
+        l0 = lambda(1,j);           % begining of domain
+        lf = lambda(row,j);         % end of domain
+        
+        %loading overlapping chebfuns
+        load(sprintf('F_kTOL_%d.mat',j), 'cheb_F_kTOL');
+        load(sprintf('F_kBOL_%d.mat',j), 'cheb_F_kBOL');
+        
+        % restricting the domains of the overlapping chebfuns
+        chebF_kT = restrict(cheb_F_kTOL, [l0,lf]);        % restricted functions
+        chebF_kB = restrict(cheb_F_kBOL, [l0,lf]);
+        
+        % computing derivative of restricted functions
+        chebF_kTdl = diff(chebF_kT);
+        chebF_kBdl = diff(chebF_kB);
+        
+        % evaluating F_kT at lambda
+        F_kT(:,j) = chebF_kT(lambda(:,j));
+        
+        F_kTdl(:,j) = chebF_kTdl(lambda(:,j));  % evaluating F_kTdl
+        F_kBdl(:,j) = chebF_kBdl(lambda(:,j));  % evaluating F_kBdl
+    end
+    
+    % reshaping
+    F_kT = reshape(F_kT, [1,M]);
+    F_kB = reshape(F_kB, [1,M]);
+    F_kTdl = reshape(F_kTdl, [1,M]);
+    F_kBdl = reshape(F_kBdl, [1,M]);
+    
+    % k times top element
+    KF_kT = j.*F_kT;
+    
+    % computing F_k
+    NOinvD_F_k = [F_kTdl(1,:); KF_kT(1,:)+F_kBdl(1,:)];
+    F_kT = invD(1,:).*NOinvD_F_k(1,:)+invD(2,:).*NOinvD_F_k(2,:);
+    F_kB = invD(3,:).*NOinvD_F_k(1,:)+invD(4,:).*NOinvD_F_k(2,:);
+    
+    % storing sumation for each n
+    F_kTsum(i,:) = term1.*F_kT;
+    F_kBsum(i,:) = term1.*F_kB;
+    
+    % updating F_kT and F_kB to F_kTOL and F_kBOL
+    
+    % resizing
+    F_kT = reshape(F_kT, [row,column]);
+    F_kB = reshape(F_kB, [row,column]);
+    F_kTdl = reshape(F_kTdl, [row,column]);
+    F_kBdl = reshape(F_kBdl, [row,column]);
+    
+    % creating new chebfuns with overlaping domains for next iteration
+    F_kTOL = [zT;F_kT;zB];
+    F_kBOL = [zT;F_kB;zB];
+    
+    F_kTOL(repB,column) = F_kTOL(rowOL-domOL,column);
+    F_kBOL(repB,column) = F_kBOL(rowOL-domOL,column);
+    F_kTOL(repT,1) = F_kTOL(domOL+1,1);
+    F_kBOL(repT,1) = F_kBOL(domOL+1,1);
+    
+    for j=1:column-1
+        F_kTOL(repB,j) = F_kTOL(idB,j+1);   % F_kTOL
+        F_kTOL(repT,j+1) = F_kTOL(idT,j);
+        F_kBOL(repB,j) = F_kBOL(idB,j+1);   % F_kBOL
+        F_kBOL(repT,j+1) = F_kBOL(idT,j);
+    end
+    
+    % fitting chebfuns to F_kTOL and F_kBOL(as functions of lambda)
+    for j=1:column
+        l0_OL = lambdaOL(1,j);              % begining of overlaping domain
+        lf_OL = lambdaOL(rowOL,j);          % end of overlaping domain
+        
+        % new overlaping chebfuns
+        cheb_F_kTOL = polyfit(lambdaOL(:,j),F_kTOL(:,j),chebN,domain(l0_OL,lf_OL));
+        cheb_F_kBOL = polyfit(lambdaOL(:,j),F_kBOL(:,j),chebN,domain(l0_OL,lf_OL));
+        
+        % saving for next iteration
+        save(sprintf('F_kTOL_%d.mat',j), 'cheb_F_kTOL');
+        save(sprintf('F_kBOL_%d.mat',j), 'cheb_F_kBOL');
+    end
+end
+
+for i=1:column
+    load(sprintf('chebPsi0T_%d.mat',i), 'chebPsi0T');
+    load(sprintf('chebPsi0B_%d.mat',i), 'chebPsi0B');
+    Psi0T(:,i) = chebPsi0T(lambda(:,i));
+    Psi0B(:,i) = chebPsi0B(lambda(:,i));
+end
+
+Psi0T = reshape(Psi0T,[1,M]);
+Psi0B = reshape(Psi0B,[1,M]);
+lambda = reshape(lambda,[1,M]);
+
+Psi_nT = Psi0T+sum(F_kTsum(ChebDiv:n,:));
+Psi_nB = Psi0B+sum(F_kBsum(ChebDiv:n,:));
+
+fix = ceil(0.015*M);
+Psi_nT(1:fix) = 0;
+Psi_nT(M-fix:M) = 0;
+Psi_nB(1:fix) = 1;
+Psi_nB(M-fix:M) = 1;
+Psi_nT = smooth(Psi_nT);
+Psi_nB = smooth(Psi_nB);
+
+figure(1)
+plot(lambda, Psi_nT,'LineWidth',2)
+title('$$\Psi(\lambda)$$ hodograph projection','interpreter','latex')
+xlabel('
+grid on
+axis([0 30 -0.1 0.1])
+
+figure(2)
+plot(lambda, Psi_nB,'LineWidth',2)
+title('$$\varphi(\lambda)$$ hodograph projection','interpreter','latex')
+grid on
+axis([0 30 0.97 1.03])
+
+for i=1:column
+    delete(sprintf('cheb_dsdl_%d.mat',i));
+    delete(sprintf('chebPsi0B_%d.mat',i));
+    delete(sprintf('chebPsi0BOL_%d.mat',i));
+    delete(sprintf('chebPsi0T_%d.mat',i));
+    delete(sprintf('chebPsi0TOL_%d.mat',i));
+    delete(sprintf('chebSigma_%d.mat',i));
+    delete(sprintf('chebSigmaOL_%d.mat',i));
+    delete(sprintf('F_kBOL_%d.mat',i));
+    delete(sprintf('F_kTOL_%d.mat',i));
+end
+end

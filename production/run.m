@@ -42,8 +42,8 @@ Xf = 10;
 
 % defining IC - chebfuns are used such that eta_prime and u_prime
 % can be defeined simply for any function
-%eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [x0, Xf]);
-eta_0 = chebfun(@(x) 0, [x0, Xf]);
+eta_0 = chebfun(@(x) H1*exp(-c1*(x - x1).^2) - H2*exp(-c2*(x - x2).^2), [x0, Xf]);
+%eta_0 = chebfun(@(x) 0, [x0, Xf]);
 eta_prime = diff(eta_0);
 
 u_0   = chebfun(@(x) -0.03*sin(3*x)*exp(-0.5*(x-5)^2), [x0 Xf]);
@@ -67,38 +67,70 @@ s = linspace(0,Xf,x_res);
 
 
 %computing solutions
-[eta_analytic u_analytic] = fast_hankel();
+[eta_analytic u_analytic] = fast_hankel(3);
 [eta_fvm u_fvm] = run_num();
 
 
 %post processing
-figure(6);
+
+disp('post processing eta.....');
+
+num = zeros(t_res, x_res);
+ana = zeros(t_res, x_res);
 
 for i = 1:t_res
 
-  ana = eta_analytic(x, repmat(t(i), 1, x_res));
-  num = eta_fvm(:, i)';
+  ana(i,:) = eta_analytic(x, repmat(t(i), 1, x_res));
+  num(i,:) = eta_fvm(:, i)';
 
   %making it zero on the other side of the shore
   max = 0;
   for j = 1:x_res
-    if num(j) + td*x(j) < 0
-      num(j) = NaN;
+    if num(i, j) + td*x(j) < 0
+      num(i, j) = NaN;
       max = j;
     end
-    if ana(j) + td*x(j) < 0
-      ana(j) = NaN;
+    if ana(i,j) + td*x(j) < 0
+      ana(i,j) = NaN;
       max = j;
     end
   end
-  %disp(max)
-  stat_norm(i) = norm(ana(max+1:end) - num(max+1:end));
-  plot(x, num ), hold on;
-  plot(x, ana ), hold on;
+  stat_norm(i) = norm(ana(i, max+1:end) - num(i, max+1:end));
+end
+
+disp('displaying .... ')
+
+figure(5);
+%disp(max)
+for i = 1:t_res
+  plot(x, num(i,:) ), hold on;
+  plot(x, ana(i,:) ), hold on;
   plot(x, -td*x), hold off;
   axis([x0 Xf -0.05 0.05])
   pause(0.01);
 end
 
-figure(7)
-plot(stat_norm)
+figure(5);
+subplot(4,1,1);
+plot(x, num(1,:)), hold on;
+% plot(x, -td*x), hold on;
+plot(x, ana(1,:)), hold off;
+
+subplot(4,1,2);
+plot(x, num(20,:)), hold on;
+%plot(x, -td*x), hold on;
+plot(x, ana(20,:)), hold off;
+
+subplot(4,1,3);
+plot(x, num(60,:)), hold on;
+%plot(x, -td*x), hold on;
+plot(x, ana(60,:)), hold off;
+
+subplot(4,1,4);
+plot(x, stat_norm);
+
+
+
+
+figure(6);
+plot(x, stat_norm);
