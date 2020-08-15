@@ -3,25 +3,21 @@
 % This solver uses a finite difference method to solve
 % the NSWE in the (\sigma,\lambda) hodograph.
 
-
-function [phi,psi] = HodoSolve()
-
-
 addpath('chebfun-master')
 addpath('BC_FVM/')
-addpath('BCproj/')
+addpath('HodoSolve/')
 
+function [phi,psi] = HodoSolve()
 
 global M N g g2 a b d
 global td H1 H2 c1 c2 x1 x2
 global eta1 u1 numLam numSig
-global Psi_nT Psi_nB
 
 %--------------SETUP PARAMTERS------------------%
 
 
-sig = linspace(0,1,5); %sigma = 1 is boundary we care about
-lam = linspace(t0,Tf,numLam); %lambda, leave at 0-10
+sig = linspace(0,1,numSig); %sigma = 1 is boundary we care about
+lam = linspace(0,10,numLam); %lambda, leave at 0-10
 
 %-----------INITIALIZING---------%
 
@@ -37,13 +33,14 @@ Cmax = 1;
 
 %-------------BOUNDARY CONDITIONS------------%
 
-%phi_bc = Psi_nT;
-%psi_bc = Psi_nB;
+%  phi_bc = proj.phi;
+%  psi_bc = proj.psi;
+ 
+%psi(:,end) = -0.003*sin(4*lam);
 
-psi(:,end) = Psi_nT;
 %phi(:, end) = -0.0000001*sin(40*lam);
 
-%psi_bc = -0.003*sin(4*lam);
+psi_bc = -0.003*sin(4*lam);
 
 
 %------------INITIAL CONDITIONS---------------%
@@ -111,3 +108,5 @@ fprintf('Done.\n')
 
 
 end
+
+

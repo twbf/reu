@@ -4,64 +4,48 @@
 % the NSWE in the (\sigma,\lambda) hodograph.
 
 
-function [phi,psi] = HodoSolve()
+function [phi,psi] = HodoSolve(Psi)
+
+  global g td
+  global t0 Tf t_res x_res
+
+  %--------------SETUP PARAMTERS------------------%
+
+  numSig = 15;
+
+  sig = linspace(0,1,numSig); %sigma = 1 is boundary we care about
+  lam = linspace(t0,Tf,t_res); %lambda, leave at 0-10
+
+  %-----------INITIALIZING---------%
+
+  dLam = lam(2)-lam(1);
+  dSig = sig(2)-sig(1);
+  courant = dLam/dSig;
+
+  phi = zeros(t_res,numSig);
+  psi = zeros(t_res,numSig);
+
+  %-------------BOUNDARY CONDITIONS------------%
+
+  phi(:, end) = Psi(1,:);
+  psi(:, end) = Psi(2,:);
+  %psi_bc = -0.003*sin(4*lam);
+
+  %------------INITIAL CONDITIONS---------------%
+
+  %phi(1,:) = 0.00001*sin(sig);
+  %psi(1,:) = H1*exp(-c1*(sig - x1).^2);
 
 
-addpath('chebfun-master')
-addpath('BC_FVM/')
-addpath('BCproj/')
 
-
-global M N g g2 a b d
-global td H1 H2 c1 c2 x1 x2
-global eta1 u1 numLam numSig
-global Psi_nT Psi_nB
-
-%--------------SETUP PARAMTERS------------------%
-
-
-sig = linspace(0,1,5); %sigma = 1 is boundary we care about
-lam = linspace(t0,Tf,numLam); %lambda, leave at 0-10
-
-%-----------INITIALIZING---------%
-
-dLam = lam(2)-lam(1);
-dSig = sig(2)-sig(1);
-
-phi = zeros(numLam,numSig);
-psi = zeros(numLam,numSig);
-
-courant = dLam/dSig
-Cmin = 0.5;
-Cmax = 1;
-
-%-------------BOUNDARY CONDITIONS------------%
-
-%phi_bc = Psi_nT;
-%psi_bc = Psi_nB;
-
-psi(:,end) = Psi_nT;
-%phi(:, end) = -0.0000001*sin(40*lam);
-
-%psi_bc = -0.003*sin(4*lam);
-
-
-%------------INITIAL CONDITIONS---------------%
-
-phi_ic = 0.00001*sin(sig);
-psi_ic = H1*exp(-c1*(sig - x1).^2);
-
-%phi(1,:) = phi_ic;
-psi(1,:) = psi_ic;
-
-fprintf('Please wait...\n');
-fprintf('Taking derivatives...\n')
+  fprintf('Please wait...\n');
+  fprintf('Taking derivatives...\n')
 
 %-----------MAIN LOOP AND COURANT CONDITION------------%
 
-courantList = zeros(numLam, numSig);
+courantList = zeros(t_res, numSig);
 
-for i = 1:numLam-1
+for i = 1:t_res-1
 
    for j = 1:numSig
 

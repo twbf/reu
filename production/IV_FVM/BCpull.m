@@ -29,78 +29,78 @@
 %%% Distributed under GNU General Public License       %%%
 %%% -------------------------------------------------- %%%
 
-function [eta1, u1] = BCpull()
+function [eta1, u1] = run_num()
 
     %%% Libraries we use:
-    addpath('BC_FVM/sources/');
-    addpath('BC_FVM/odetpbar/');
+    addpath('IV_FVM/sources/');
+    addpath('IV_FVM/odetpbar/');
 
     %%% Global variables:
     %for numerical scheme
     global cf2 d xc FS IN LW
-    global a amp td b g g2 dx h N M
-    global H1 H2 c1 c2 x1 x2
-    global t0 Tf x0 Xf
+    global a amp td b g g2 dx h N
+
+    %IC variables from run.m
+    global eta_0 eta_prime u_0 u_prime td t0 Tf x0 Xf
+    global x_res t_res %resolution
+
+    fprintf('Numeric Simulation...\n');
+
+    FS = 'FontSize';
+    IN = 'Interpreter';
+    LS = 'LineStyle';
+    LW = 'LineWidth';
+
+    %%% Physical parameters:
+    g2 = 0.5*g;	% g/2
+    cf2 = 0.0;	% friction coefficient
+
+    %a  = -1;	% the left boundary (incident wave)
+    %b  = 10;	% the right boundary (wall)
 
     %%% Numerical parameters:
+    N  = x_res;							% number of grid points
     x  = linspace(x0, Xf, N+1)';			% cell interfaces (the apostrophe is to transpose)
     dx = x(2) - x(1);                  	% spatial grid step
     xc = 0.5*(x(1:end-1) + x(2:end));  	% centers of cells
 
-    %%% x = 1 boundary
+    %%% Bathymetry function:
+    h  = td*xc;
+
+    mm=x_res;
+
+    small_h = h(1:mm);
+
+    %%% Choice of the initial condition:
+    w0 = zeros(2*N,1);
+
+    w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities
+
+    w0(1:N) = w0(1:N) + eta_0(xc);
+
+    %setting speed
+    %u = 0 where x<0
+    for i = 1:N
+      if xc(i) > 0
+        w0(i+N) = w0(i)*u_0(xc(i));
+      end
+    end
+
+    %%% We run the simulation:
+    options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
+    sol = ode23(@RHS, [t0 Tf], w0, options);
+
+    %%% Post-processing of the solution:
+    M     = t_res;	% number of time instances where we project solution
+    tlist = linspace(t0, Tf, M);
+    solpr = deval(sol, tlist);
+
     xeq = x == 1;
     xeq1_eta = find(xeq);
     xeq1_u = find(xeq) + N;
 
-    %%% Bathymetry function:
-    h  = td*xc;
-
-    %%% Choice of the initial condition:
-    w0 = zeros(2*N,1);
-    w0(1:N) = max(h, eps+0*h);   % zero initial condition without velocities;
-    w0(1:N) = w0(1:N) + H1*exp(-c1*(xc - x1).^2) - H2*exp(-c2*(xc - x2).^2);
-
-    %%% We run the simulation:
-    options = odeset('AbsTol', 1e-4, 'RelTol', 1e-4, 'OutputFcn', @odetpbar, 'MaxStep', 1.0);
-    fprintf('Numeric Simulation...\n');
-    sol = ode23(@RHS, [t0 Tf], w0, options);
-    fprintf(' Done\n');
-
-
-     %%% Post-processing of the solution:
-     tlist = linspace(t0, Tf, M);
-     solpr = deval(sol, tlist);
-
-     %U = solpr(1:N,1:M);
-     %eta = solpr(N+1:end,1:end);
-
-    %%% We locate the solution location and graph Phi and Psi
-
-
-    %xT = x.';
-    %xSec = xT(1:end-1);
-
-    %figure(3)   % FVM solution for U
-    %mesh(tlist,xSec,U)
-    %title('Solution for U using Finite Volume Method')
-    %xlabel('t')
-    %ylabel('x')
-    %zlabel('Speed')
-
-
-    %figure(4)    % FVM solution for Eta
-    %mesh(tlist,xSec,eta)
-    %title('Solution for Eta using Finite Volume Method')
-    %xlabel('t')
-    %ylabel('x')
-    %zlabel('Height')
-
-
-    % defining solution location:
-
-%not correct
     u1 = solpr(xeq1_u,:);
-    eta1 = solpr(xeq1_eta,:)-1;
+    eta1 = solpr(xeq1_eta,:)-1; % -1 because the norm height of teh water at 1 is 1
 
     figure(1);
     plot(eta1);

@@ -5,12 +5,8 @@ addpath('BCproj/')
 addpath('HodoSolve/')
 
 %%% Global variables:
-global cf2 d xc FS IN LW
-global a amp td b g g2 dx h N M
-global H1 H2 c1 c2 x1 x2
-global t0 Tf x0 Xf
-global eta1 u1 Psi_nT Psi_nB
-global phi psi numLam numSig
+global td g
+global t0 Tf x0 Xf eta
 
 FS = 'FontSize';
 IN = 'Interpreter';
@@ -41,7 +37,7 @@ Tf = 5;
 
 % Hodograph Solver resolution parameters
 numSig = 6;
-numLam = 10000;
+numLam = 1000;
 
 % domain of x
 x0 = -2;
@@ -53,11 +49,3 @@ M  = 1000;	% number of time instances where we project solution
 [eta1, u1] = BCpull();   % solution via FVM
 [Psi_nT, Psi_nB] = BCproj();   % hodohraph solutions via Data Projection
 [phi, psi] = HodoSolve(); % hodograph Solver
-
-
-
-
-
-
-
-
