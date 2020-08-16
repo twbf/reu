@@ -29,7 +29,7 @@
 %%% Distributed under GNU General Public License       %%%
 %%% -------------------------------------------------- %%%
 
-function [eta1, u1] = run_num()
+function [eta1, u1, eta, u] = run_num()
 
     %%% Libraries we use:
     addpath('IV_FVM/sources/');
@@ -100,12 +100,32 @@ function [eta1, u1] = run_num()
     xeq1_u = find(xeq) + N;
 
     u1 = solpr(xeq1_u,:);
-    eta1 = solpr(xeq1_eta,:)-1; % -1 because the norm height of teh water at 1 is 1
+    eta1 = solpr(xeq1_eta,:)-solpr(xeq1_eta,1); % -1 because the norm height of teh water at 1 is 1
 
     figure(1);
     plot(eta1);
 
     figure(2);
     plot(u1);
+
+    M     = t_res;	% number of time instances where we project solution
+    mm = x_res;
+    tlist = linspace(t0, Tf, M);
+    solpr = deval(sol, tlist);
+
+    eta = zeros(mm,M);
+    u = zeros(mm,M);
+    for i=1:mm
+      for j=1:M
+
+        u(i,j) = solpr(N + i,j);
+
+        if solpr(i,j)<0.0000001 &&  solpr(i,j)>-0.0000001
+            eta(i,j) = 0;
+        else
+            eta(i,j) = (solpr(i,j)-small_h(i));
+        end
+      end
+    end
 
 end
