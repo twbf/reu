@@ -4,14 +4,12 @@
 % the NSWE in the (\sigma,\lambda) hodograph.
 
 
-function [phi,psi] = HodoSolve(Psi)
+function [eta,u] = HodoSolve(Psi)
 
   global g td
-  global t0 Tf t_res x_res
+  global t0 Tf t_res x_res numSig
 
   %--------------SETUP PARAMTERS------------------%
-
-  numSig = 600;
 
   sig = linspace(0,1,numSig); %sigma = 1 is boundary we care about
   lam = linspace(t0,Tf*sqrt(g),t_res); %lambda, leave at 0-10
@@ -64,19 +62,41 @@ for i = 2:t_res-1
          %psi(i+1,j) = psi(i,j-1); %took out sigma
          %psi(i+1,j) =  ( ( -3.5*sig(j+1)*(dLam/dSig) ) * ( phi(i,j+1) - phi(i,j) ) )-(phi(i,j)*2*dLam)+psi(i-1,j);
        else
+
          phi(i+1,j) = ( (-dLam/dSig)*( psi(i,j+1) - psi(i,j-1) ) )+phi(i-1,j);
+
          psi(i+1,j) =  ( ( -sig(j)*(dLam/dSig) ) * ( phi(i,j+1) - phi(i,j-1) ) )-(phi(i,j)*2*dLam)+psi(i-1,j);
+         
        end
 
        courantList(i, j) = phi(i+1, j) * courant;
 
    end
-   phi(i+1,1) = ( -(dLam/dSig) * ( psi(i+1,1+1) - psi(i,1) ) + phi(i,1))/(1+(dLam)^2/dSig);
-   %phi(i+1,1) = phi(i,1)/(1+(dLam)^2/dSig);
-   psi(i+1,1) = -dLam*phi(i+1,1) + psi(i,1);
-   %phi(i+1,1) = ( (-dLam/dSig)*( psi(i+1,1+1) - psi(i+1,1) ) )+phi(i,1);
-   %psi(i+1,1) = -dLam*phi(i+1,1) + psi(i,1);
+   %solving with simple 2 point FD
+   %phi(i+1,1) = ( -(dLam/dSig) * ( psi(i+1,1+1) - psi(i,1) ) + phi(i,1) )/( 1 + (dLam)^2 / dSig );
+   %psi(i+1,1) = -dLam * phi(i+1,1) + psi(i,1);
 
+   %2 point central differnce
+   %phi(i+1,1) = ( -(2*dLam/dSig) * ( psi(i+1,1+1) - psi(i,1) ) + phi(i-1,1) )/( 1 + (2*dLam)^2 / dSig );
+   %psi(i+1,1) = -dLam *2* phi(i+1,1) + psi(i-1,1);
+
+   %2 point without solving
+   psi(i+1,1) = -dLam*phi(i,1) + psi(i,1);
+   phi(i+1,1) = ( (-dLam/dSig)*( psi(i,1+1) - psi(i,1) ) )+phi(i,1);
+
+   %3 point backwards difference without solving
+   %phi(i+1,1) = ( ( (-2*dLam/dSig)*( psi(i,1+1) - psi(i,1) ) )-phi(i-1,1) + 4*phi(i,1) )/3;
+   %psi(i+1,1) = (-2*dLam*phi(i+1,1) - psi(i-1,1) + 4*psi(i,1))/3;
+
+   %3 point backwards differnce
+   %phi(i+1,1) = ( -(2*dLam/dSig) * ( psi(i+1,1+1) - psi(i,1) ) + phi(i-1,1) )/( 1 + (2*dLam)^2 / dSig );
+   %psi(i+1,1) = -dLam *2* phi(i+1,1) + psi(i-1,1);
+
+   %phi(i+1,1) = phi(i,1)/(1+(dLam)^2/dSig);
+
+   %secound derivative heat
+   %psi(i+1,1) = ( psi(i+1,1+1) - dSig/(dLam)^2*( psi(i-1,1) - 2*psi(i,1) ) )/( 1 + dSig/(dLam)^2 );
+   %phi(i+1,1) = ( phi(i+1,1+1) - dSig/(dLam)^2*( phi(i-1,1) - 2*phi(i,1) ) )/( 1 + dSig/(dLam)^2 );
 
 
    %guess
@@ -111,5 +131,42 @@ for i = 2:t_res-1
   fprintf('Done.\n')
 
   %CG transform
+
+  disp('    backwards CG transform and demensionalization... ');
+
+  eta = zeros(t_res, numSig);
+  u = zeros(t_res, numSig);
+  xx = zeros(t_res, numSig);
+  tt = zeros(t_res, numSig);
+
+  for i=1:t_res
+    %CG transform
+    u(i,:) = phi(i,:);
+    eta(i,:) = psi(i,:) - u(i,:).^2/2;
+    xx(i,:) = sig - eta(i,:);
+    tt(i,:) = u(i,:) + lam(i);
+
+    %deminsionalizing
+    u(i,:) = u(i,:)*sqrt(g*td);
+    eta(i,:) = eta(i,:);
+    tt(i,:) = tt(i,:)/sqrt(td*g);
+  end
+
+  %to display eta and u
+    %figure(5);
+    %mesh(tt,xx,eta);
+
+    %figure(5);
+    %mesh(tt,xx,u);
+
+  disp('    scattered interpolation of eta and u... ');
+
+  s_tt = reshape(tt, [t_res*numSig, 1]);
+  s_xx = reshape(xx, [t_res*numSig, 1]);
+  s_eta = reshape(eta, [t_res*numSig, 1]);
+  s_u = reshape(u, [t_res*numSig, 1]);
+
+  eta = scatteredInterpolant(s_xx, s_tt, s_eta);
+  u = scatteredInterpolant(s_xx, s_tt, s_u);
 
 end
